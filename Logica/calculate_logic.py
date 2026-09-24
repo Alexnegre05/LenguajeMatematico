@@ -1,4 +1,11 @@
+import sys
+import os # we use this libraries only for problems with importations and ubications of folders and files
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from evaluate_expressions import Logic, Proposition, Operator, Operation, expression, Delimeter
+
+
 
 # proves
 logica = Logic()

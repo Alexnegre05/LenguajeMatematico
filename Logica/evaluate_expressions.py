@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from binary_operation import Logic, Proposition, Operator, Delimeter, Operation
 from my_ast import AST #we import the AST
 
