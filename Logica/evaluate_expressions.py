@@ -258,6 +258,34 @@ class expression(Logic): # class that we use to define when we are working with 
       return self.array
 
 
+  # function that evaluates a node of teh AST and calculates a value
+  def evaluate_node(self,node):
+
+    if(node == None): # if its null we reurn null
+      return None
+
+    # this if is the case of having the end of a branch of the tree
+
+    if (node.right_node == None and node.left_node == None):
+      return node.central_node
+
+    # if it is an operator we evaluate left and right on the function
+
+    right = self.evaluate_node(node.right_node)
+    left = self.evaluate_node(node.left_node)
+
+    # now we know that we have an operator we calculate the operation, we have to separate the case of ¬ from the other ones
+    if (node.central_node.operator == "¬"):
+      operation = Operation(right, node.central_node, None)
+    else:
+      operation = Operation(left, node.central_node, right)
+
+    result = operation.Result()
+
+    # we have to put the result into a new proposition
+    p = Proposition(result)
+
+    return p # we return the p
 
 
   def evaluate(self): # function that evaluates the expresion after we have checked that the sintaxis is correct
@@ -272,73 +300,7 @@ class expression(Logic): # class that we use to define when we are working with 
       tree = ast.create_ast(self.array, "operator")
       # we will begin evaluating only the ¬ because have more precendent than the other expresions
 
-      copy_array = [] # we are going to make a copy of the array where we are going to put the values of the original array
-      # but when we are in the case of the operation we are seeking we are going to change the values of the elements for the result
-      # we don't make the changes in the original array because of the for
+      result = self.evaluate_node(tree)
 
-      i = 0
-      while (i < len(self.array)):
-
-
-        if ((isinstance(self.array[i], Operator) == True) and self.array[i].operator == "¬"):
-
-          # since we know the expression is correct we know that it can not finish with an operator so we can check i + 1 without any problems
-          # the order is proposition, operator
-          result = Operation(self.array[i+1], self.array[i], None) # we have created the object operation but we have not calculated them, we need the function Result
-
-          # we put the result in a new Proposition
-
-          value = result.Result()
-          p = Proposition(value)
-          # we add into the new array the new proposition
-          copy_array.append(p)
-
-          # since we want to move two positions into the array, the i and the i + 1, we add +2
-
-          i = i + 2
-
-        else:
-          copy_array.append(self.array[i]) # we copy the element into the new array
-
-          i = i + 1
-
-      # End of loop
-
-      # once we are done with the loop we pass the copy array to the original array
-
-      self.array = copy_array
-      # and we put the copy back to 0 elements
-
-      copy_array = []
-
-      # before continuing the next operations if we have that the self.array is one element we return its value(we know that its a proposition)
-
-      if (len(self.array) == 1):
-        return self.array[0].value
-
-
-      # we do the same but for the other operations such as ^(for precedence) but calling a function
-
-      self.array = self.binary_operation("^")
-
-      if (len(self.array) == 1):
-        return self.array[0].value
-
-      self.array = self.binary_operation("v")
-
-      if (len(self.array) == 1):
-        return self.array[0].value
-
-      self.array = self.binary_operation("-->")
-
-      if (len(self.array) == 1):
-        return self.array[0].value
-
-      self.array = self.binary_operation("<-->")
-
-      if (len(self.array) == 1):
-        return self.array[0].value
-
-      # if we arrived here and you have not entered any return
-
-      raise Exception("Something is wrong")
+      return result.value # we return the result
+      

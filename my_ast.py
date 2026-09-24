@@ -72,14 +72,14 @@ class AST():
                 if (i > position_array):
                     right_list.append(array[i])
         
-            # now we use recursivity and we call the same function again but for each array
-            right_branch = self.create_ast(right_list, type)
-            left_branch = self.create_ast(left_list, type)
+        # now we use recursivity and we call the same function again but for each array
+        right_branch = self.create_ast(right_list, type)
+        left_branch = self.create_ast(left_list, type)
         
-            # we use the right and the left to create the AST and return it(recursivity)
-            new_node = AST(self.central_node, right_branch, left_branch)
+        # we use the right and the left to create the AST and return it(recursivity)
+        new_node = AST(self.central_node, right_branch, left_branch)
         
-            return new_node
+        return new_node
 
 
 
