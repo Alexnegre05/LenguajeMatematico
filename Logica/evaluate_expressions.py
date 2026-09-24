@@ -1,4 +1,5 @@
 from binary_operation import Logic, Proposition, Operator, Delimeter, Operation
+from my_ast import AST #we import the AST
 
 class expression(Logic): # class that we use to define when we are working with multiple propositions and operations
 
@@ -263,6 +264,8 @@ class expression(Logic): # class that we use to define when we are working with 
       raise Exception("Se ha introducido una expresion erronea")
     else:
 
+      ast = AST(None)
+      tree = ast.create_ast(self.array, "operator")
       # we will begin evaluating only the ¬ because have more precendent than the other expresions
 
       copy_array = [] # we are going to make a copy of the array where we are going to put the values of the original array
