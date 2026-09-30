@@ -66,6 +66,11 @@ class expression(Logic): # class that we use to define when we are working with 
   # examplo from (p^q) to only p^q we have also to take care of cases such as (p^q)^(pvq) because here we can not eliminate the delimeters
   def eliminate_exterior_delimiters(self):
 
+
+    # here we check if we have a last ) and (, if not we return 0
+    if (len(self.array) < 2 or isinstance(self.array[0], Delimeter) == False or self.array[0].delimeter != "(" or isinstance(self.array[len(self.array)-1], Delimeter) == False or self.array[len(self.array)-1].delimeter != ")"):
+      return 0
+    
     count_delimiters = 0
     
     for i in range(0, len(self.array)):
@@ -191,9 +196,24 @@ class expression(Logic): # class that we use to define when we are working with 
       elif(i == (length - 1)): # the last one can only be a proposition and the one before it can only be an operation
        
         
-        if (isinstance(self.array[i], Proposition) == False or isinstance(self.array[i-1], Operator) == False):
+        # CASE A: If the last element is a Proposition, we validate the previous one (Your original logic)
 
+        if (isinstance(self.array[i], Proposition) == True):
+          if (isinstance(self.array[i-1], Operator) == False):
+            return 0
+
+        # CASE B: If the last element is a Delimiter, we make sure that it is ")" and not "("
+
+        if (isinstance(self.array[i], Delimeter) == True):
+          if (self.array[i].delimeter == "("):
+            return 0
+
+        # CASE C: If it is neither a Proposition nor a Delimiter (for example, it ends in ^), it is wrong
+
+        if (isinstance(self.array[i], Proposition) == False and isinstance(self.array[i], Delimeter) == False):
           return 0
+
+          
 
         
         # special case p ¬ q if and only if i >=2 because if not i - 2 could be out of range
@@ -219,6 +239,29 @@ class expression(Logic): # class that we use to define when we are working with 
 
         # here we check that we do not have the case for p ¬ q and we check that i > 2
         if (i >= 2 and isinstance(self.array[i], Proposition) == True and isinstance(self.array[i-1], Operator) == True and self.array[i-1].operator == "¬" and isinstance(self.array[i-2], Proposition) == True):
+          return 0
+
+
+        # cases of delimeters 
+
+         # CASE 1: Prevent a binary operator right after an opening parenthesis (e.g., "( ^ p")
+        if (isinstance(self.array[i-1], Delimeter) == True and self.array[i-1].delimeter == "(" and isinstance(self.array[i], Operator) == True and self.array[i].operator != "¬"):
+          
+          return 0
+
+        # CASE 2: Prevent a closing parenthesis right after an operator (e.g., "p ^ )")
+        if (isinstance(self.array[i-1], Operator) == True and isinstance(self.array[i], Delimeter) == True and self.array[i].delimeter == ")"):
+          
+          return 0
+
+        # CASE 3: Prevent an opening parenthesis right after a proposition without an operator (e.g., "p ( q )")
+        if (isinstance(self.array[i-1], Proposition) == True and isinstance(self.array[i], Delimeter) == True and self.array[i].delimeter == "("):
+          
+          return 0
+
+        # CASE 4: Prevent a proposition right after a closing parenthesis without an operator (e.g., "( p ) q")
+        if (isinstance(self.array[i-1], Delimeter) == True and self.array[i-1].delimeter == ")" and isinstance(self.array[i], Proposition) == True):
+          
           return 0
 
 
