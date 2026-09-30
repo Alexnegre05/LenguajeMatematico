@@ -297,7 +297,7 @@ class expression(Logic): # class that we use to define when we are working with 
     else:
 
       ast = AST(None)
-      tree = ast.create_ast(self.array, "operator")
+      tree = ast.create_ast(self.array, "operator", "delimeter")
       # we will begin evaluating only the ¬ because have more precendent than the other expresions
 
       result = self.evaluate_node(tree)

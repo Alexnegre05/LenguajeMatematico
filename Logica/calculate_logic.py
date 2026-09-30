@@ -18,7 +18,7 @@ proposicion2 = Proposition(0)
 delimeter1 = Delimeter("(")
 delimeter2 = Delimeter(")")
 
-expression = expression([ proposicion, operador, proposicion, operador, proposicion2,operador,proposicion])
+expression = expression([ proposicion, operador,delimeter1, proposicion, operador, proposicion2,operador,proposicion, delimeter2, operador, proposicion])
 
 
 
