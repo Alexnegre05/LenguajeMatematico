@@ -60,6 +60,7 @@ class expression(Check): # class that we use to define when we are working with 
     # this if is the case of having the end of a branch of the tree
 
     if (node.right_node == None and node.left_node == None):
+
       return node.central_node
 
     # if it is an operator we evaluate left and right on the function
@@ -69,6 +70,7 @@ class expression(Check): # class that we use to define when we are working with 
 
     # now we know that we have an operator we calculate the operation, we have to separate the case of ¬ from the other ones
     if (node.central_node.operator == "¬"):
+
       operation = Operation(right, node.central_node, None)
     else:
       operation = Operation(left, node.central_node, right)
@@ -80,8 +82,69 @@ class expression(Check): # class that we use to define when we are working with 
 
     return p # we return the p
 
+
+
+  def simplify_double_negation(self, actual_node):
+
+
+    node_null = False # if we find that a node is null we stop searching 
+
+    while (node_null == False):
+    
+          if (actual_node.central_node == None): # we exit the while
+    
+            node_null = True
+    
+          else:
+    
+            if ((isinstance(actual_node.central_node, Operator) == True) and actual_node.central_node.operator == "¬"): # if the node is an operation and its ¬
+              
+              # we check if its have sons, its and  and if the operator is ¬
+              node = actual_node.right_node # we put this into node so tahat we don't have to worry aboiut to much node.node. ...
+    
+              if ((isinstance(node.central_node, Operator) == True) and node.central_node != None and node.central_node.operator == "¬"):
+    
+                node = actual_node.right_node.right_node
+
+                if (node.central_node != None and isinstance(node.central_node, Proposition) == True):
+                  pass 
+                # if its have another node and is a p
+                  # here we make the change
+                
+                else:
+                  node_null = True
+              else:
+                node_null = True
+            else:
+              node_null = True
+
+    return actual_node # we return the tree
+
+
+    
+
   def simplify_tree(self, tree): # funcion que se encarga de simplificar el arbol
-    return tree
+  # we are only going to program those functions that simplify the tree
+
+    # first simplification ¬ ¬ p == p
+
+    if (tree.right_node != None): # if the ones bellow thsi node are not null we call this function again(the simplify tree)
+   
+        tree.right_node = self.simplify_tree(tree.right_node)
+   
+    if (tree.left_node != None):
+        
+        tree.left_node = self.simplify_tree(tree.left_node)
+
+    tree = self.simplify_double_negation(tree) # here we recibe the first node 
+
+    
+  
+  
+    return tree # at the end we return the tree # once we are done with the recursive
+ 
+
+
 
 
   def evaluate(self): # function that evaluates the expresion after we have checked that the sintaxis is correct

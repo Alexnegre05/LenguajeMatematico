@@ -229,22 +229,22 @@ class Check(Logic):
 
         # cases of delimeters 
 
-         # CASE 1: Prevent a binary operator right after an opening parenthesis (e.g., "( ^ p")
+         # CASE 1: Prevent a binary operator right after an opening parenthesis  ex ( ^ p)
         if (isinstance(self.array[i-1], Delimeter) == True and self.array[i-1].delimeter == "(" and isinstance(self.array[i], Operator) == True and self.array[i].operator != "¬"):
           
           return 0
 
-        # CASE 2: Prevent a closing parenthesis right after an operator (e.g., "p ^ )")
+        # CASE 2: Prevent a closing parenthesis right after an operator ex (p ^ )
         if (isinstance(self.array[i-1], Operator) == True and isinstance(self.array[i], Delimeter) == True and self.array[i].delimeter == ")"):
           
           return 0
 
-        # CASE 3: Prevent an opening parenthesis right after a proposition without an operator (e.g., "p ( q )")
+        # CASE 3: Prevent an opening parenthesis right after a proposition without an operator es p ( q )
         if (isinstance(self.array[i-1], Proposition) == True and isinstance(self.array[i], Delimeter) == True and self.array[i].delimeter == "("):
           
           return 0
 
-        # CASE 4: Prevent a proposition right after a closing parenthesis without an operator (e.g., "( p ) q")
+        # CASE 4: Prevent a proposition right after a closing parenthesis without an operator ex ( p ) q
         if (isinstance(self.array[i-1], Delimeter) == True and self.array[i-1].delimeter == ")" and isinstance(self.array[i], Proposition) == True):
           
           return 0
