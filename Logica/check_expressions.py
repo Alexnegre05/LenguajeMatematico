@@ -47,6 +47,9 @@ class Check(Logic):
     
 
 
+
+
+
   # here we have a function that eliminates only the first and the last delimiters if we bigin with a delimiter and we finish with another one
   # examplo from (p^q) to only p^q we have also to take care of cases such as (p^q)^(pvq) because here we can not eliminate the delimeters
   def eliminate_exterior_delimiters(self):
