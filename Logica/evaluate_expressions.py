@@ -14,7 +14,7 @@ class expression(Check): # clase que usamos para definir cuándo estamos trabaja
   def __init__(self, array):
 
 
-    if (array is not None and len(array) > 1 and isinstance(array[len(array) -1], Operator) == False): 
+    if (array is not None and len(array) > 1 and isinstance(array[-1], Operator) == False): 
       # queremos que el array tenga más de un argumento y que el último no sea un operador
       self.array = array
 

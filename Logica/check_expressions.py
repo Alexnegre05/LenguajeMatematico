@@ -51,7 +51,7 @@ class Check(Logic):
 
 
     # aquí comprobamos si tenemos un último ) y un primer (, si no, devolvemos 0
-    if (len(self.array) < 2 or isinstance(self.array[0], Delimeter) == False or self.array[0].delimeter != "(" or isinstance(self.array[len(self.array)-1], Delimeter) == False or self.array[len(self.array)-1].delimeter != ")"):
+    if (len(self.array) < 2 or isinstance(self.array[0], Delimeter) == False or self.array[0].delimeter != "(" or isinstance(self.array[-1], Delimeter) == False or self.array[-1].delimeter != ")"):
       return 0
     
     count_delimiters = 1
