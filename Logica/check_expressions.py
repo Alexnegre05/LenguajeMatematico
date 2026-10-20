@@ -9,12 +9,8 @@ class Check(Logic):
  
   def check_delimeters(self):
 
-        
-        # comprobamos que los delimitadores tengan el mismo número de ( que de )
-            
-        # ahora comprobamos que no tengamos algo como ) ( verificando que los delimitadores derechos sean siempre <= que los delimitadores izquierdos
-
-        # este for comprueba ambas cosas
+    
+    
 
         count_delimiters_left = 0
        
@@ -31,13 +27,15 @@ class Check(Logic):
              
               count_delimiters_left = count_delimiters_left + 1
 
-            if (count_delimiters_right > count_delimiters_left):
+            if (count_delimiters_right > count_delimiters_left): 
             
               raise Exception("the delimiters right and left are not equal")
 
-          if (count_delimiters_left != count_delimiters_right): # si no es igual lanzamos una excepción
-                    
-            raise Exception("the delimiters right and left are not equal")
+        # comprobamos que los delimitadores tengan el mismo número de ( que de ) al final de el for
+
+        if count_delimiters_left != count_delimiters_right: 
+
+          raise Exception("the delimiters right and left are not equal")
     
 
 
