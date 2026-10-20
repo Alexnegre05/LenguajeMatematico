@@ -27,9 +27,11 @@ class Operation(Logic): # clase que toma dos proposiciones y una operación y de
 
       # mensaje personal de error
       if (isinstance(Proposition1,Proposition) == False):
+        
         raise Exception("The first proposition introduced is not a valid proposition")
 
       elif (isinstance(operator, Operator) == False):
+        
         raise Exception("the operator introduced is not a valid operator")
 
       elif (isinstance(Proposition2,Proposition) == False):
@@ -59,6 +61,7 @@ class Operation(Logic): # clase que toma dos proposiciones y una operación y de
       # Cambiado a "is None" para solucionar AttributeError
       if (Operator == "¬" and self.Proposition2 is None):
         Proposition2 = None
+
       else:
         Proposition2 = self.Proposition2.value
 
@@ -78,7 +81,7 @@ class Operation(Logic): # clase que toma dos proposiciones y una operación y de
           return 1
 
       # hacemos lo mismo para los otros operadores
-      if (Operator == "v"):
+      elif (Operator == "v"):
 
 
         if (Proposition1 == 0 and Proposition2 == 0):
@@ -93,7 +96,7 @@ class Operation(Logic): # clase que toma dos proposiciones y una operación y de
         elif (Proposition1 == 1 and Proposition2 == 1):
           return 1
 
-      if (Operator == "-->"):
+      elif (Operator == "-->"):
 
 
         if (Proposition1 == 0 and Proposition2 == 0):
@@ -109,7 +112,7 @@ class Operation(Logic): # clase que toma dos proposiciones y una operación y de
           return 1
 
 
-      if (Operator == "<-->"):
+      elif (Operator == "<-->"):
 
 
         if (Proposition1 == 0 and Proposition2 == 0):
@@ -124,7 +127,7 @@ class Operation(Logic): # clase que toma dos proposiciones y una operación y de
         elif (Proposition1 == 1 and Proposition2 == 1):
           return 1
 
-      if (Operator == "¬"): # caso especial, la negación
+      elif (Operator == "¬"): # caso especial, la negación
 
         if (Proposition1 == 0):
           return 1
