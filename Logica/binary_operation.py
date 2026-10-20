@@ -43,7 +43,7 @@ class Operation(Logic): # clase que toma dos proposiciones y una operación y de
           raise Exception("The second proposition introduced is not a valid proposition")
 
       else:
-        print("porque estas aqui")
+        raise Exception("Ha sucedido un error")
 
 
 
