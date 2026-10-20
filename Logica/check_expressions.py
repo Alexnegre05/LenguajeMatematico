@@ -54,9 +54,13 @@ class Check(Logic):
     if (len(self.array) < 2 or isinstance(self.array[0], Delimeter) == False or self.array[0].delimeter != "(" or isinstance(self.array[len(self.array)-1], Delimeter) == False or self.array[len(self.array)-1].delimeter != ")"):
       return 0
     
-    count_delimiters = 0
-    
-    for i in range(0, len(self.array)):
+    count_delimiters = 1
+
+    # dado que la primera y la ultima linea de el array ya sabemos que hay ( y hay ) 
+    # el for puede empezar una posicion despues y finalizar una posicion antes
+    # por eso si o si count delimeters ya empieza en 1
+
+    for i in range(1, len(self.array) -1):
 
       if (isinstance(self.array[i],Delimeter) == True):
 
@@ -66,20 +70,28 @@ class Check(Logic):
         else:
           count_delimiters = count_delimiters - 1
 
+      # Si el contador llega a 0 ANTES del final, significa que los paréntesis no son exteriores
+      # Ejemplo: (p ^ q) ^ (r v s) -> Rompe aquí en el primer ')' porque no envuelve todo
+       
+      if count_delimiters == 0:
+        return 0
 
+    if count_delimiters == 1: # si ha encontrado parentesis
+      return 1
 
-      if (isinstance(self.array[i], Delimeter) == True):
-
-        if ((i == (len(self.array) - 1)) and count_delimiters == 0 and self.array[i].delimeter == ")"): # comprobamos que solo sea 0 cuando estamos al final y el último es un )
-
-          return 1
 
     return 0 # devolvemos 0 si los delimitadores no están en los extremos
+
+
+
+
 
   def eliminate_redundant_delimiters(self): # devolveremos 1 solo si hemos encontrado un delimitador doble
     # vamos hacia atrás
     
-
+    if len(self.array) < 4: # si es menor a 4 no puede pasar que tengamos [(,(,),)]
+        return 0
+    
     value_iterator = -1
     
 
@@ -88,6 +100,7 @@ class Check(Logic):
 
       # hemos encontrado un delimitador doble que es )) 
       if(isinstance(self.array[i], Delimeter) == True and self.array[i].delimeter == ")"):
+        
         if(isinstance(self.array[i + 1], Delimeter) == True and self.array[i+1].delimeter == ")"):
 
           value_iterator = i
