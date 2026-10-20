@@ -162,7 +162,7 @@ class Check(Logic):
 
       if (value == 1):
         self.array.pop(0) # restamos el primer y el último elemento
-        self.array.pop(len(self.array) - 1)
+        self.array.pop(-1)
 
     
 
