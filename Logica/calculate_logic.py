@@ -1,5 +1,5 @@
 import sys
-import os # we use this libraries only for problems with importations and ubications of folders and files
+import os # usamos esta libreria por tema de problemas de importaciones entre librerias
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 

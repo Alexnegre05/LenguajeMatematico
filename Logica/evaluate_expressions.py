@@ -3,23 +3,26 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from binary_operation import Logic, Proposition, Operator, Delimeter, Operation
-from my_ast import AST #we import the AST
+from my_ast import AST # importamos el AST
 
 from check_expressions import Check
 from simplify_tree import TreeSimplification
 
 
-class expression(Check): # class that we use to define when we are working with multiple propositions and operations
+class expression(Check): # clase que usamos para definir cuándo estamos trabajando con múltiples proposiciones y operaciones
 
   def __init__(self, array):
 
 
     if (array is not None and len(array) > 1 and isinstance(array[len(array) -1], Operator) == False): 
-      # we want the array to have more than one argument and that the last one is not an operator
+      # queremos que el array tenga más de un argumento y que el último no sea un operador
       self.array = array
+
     else:
+      
       if (array is None or len(array) == 1):
         raise Exception("there are not sufiecient elements in the expression")
+      
       else:
         raise Exception("You can not end with a operator")
 
@@ -27,10 +30,11 @@ class expression(Check): # class that we use to define when we are working with 
 
 
 
-  def binary_operation(self, operation): # recives the string and the operation you want to solve and gives and answer
+  def binary_operation(self, operation): # recibe la cadena y la operación que quieres resolver y devuelve una respuesta
 
       copy_array = []
       i = 0
+
       while (i < len(self.array)):
 
         if ((isinstance(self.array[i], Operator) == True) and self.array[i].operator == operation):
@@ -39,7 +43,7 @@ class expression(Check): # class that we use to define when we are working with 
             value = result.Result()
             p = Proposition(value)
 
-            copy_array.pop() # we substract the last proposition since now its part of the operation that we want to solve, we use pop for that
+            copy_array.pop() # restamos la última proposición ya que ahora forma parte de la operación que queremos resolver, usamos pop para ello
             copy_array.append(p)
 
             i = i + 2
@@ -53,24 +57,28 @@ class expression(Check): # class that we use to define when we are working with 
       return self.array
 
 
-  # function that evaluates a node of teh AST and calculates a value
+
+
+
+  # función que evalúa un nodo del AST y calcula un valor
   def evaluate_node(self,node):
 
-    if (node == None): # if its null we reurn null
+    if (node == None): # si es nulo devolvemos nulo
       return None
 
-    # this if is the case of having the end of a branch of the tree
+    # este if es para el caso en el que tenemos el final de una rama del árbol
 
     if (node.right_node == None and node.left_node == None):
 
       return node.central_node
 
-    # if it is an operator we evaluate left and right on the function
+    # si es un operador evaluamos la izquierda y la derecha en la función
 
     right = self.evaluate_node(node.right_node)
+    
     left = self.evaluate_node(node.left_node)
 
-    # now we know that we have an operator we calculate the operation, we have to separate the case of ¬ from the other ones
+    # ahora que sabemos que tenemos un operador calculamos la operación, tenemos que separar el caso de ¬ de los demás
     if (node.central_node.operator == "¬"):
 
       operation = Operation(right, node.central_node, None)
@@ -79,10 +87,10 @@ class expression(Check): # class that we use to define when we are working with 
 
     result = operation.Result()
 
-    # we have to put the result into a new proposition
+    # tenemos que poner el resultado dentro de una nueva proposición
     p = Proposition(result)
 
-    return p # we return the p
+    return p # devolvemos la p
 
 
 
@@ -91,7 +99,7 @@ class expression(Check): # class that we use to define when we are working with 
 
 
 
-  def evaluate(self): # function that evaluates the expresion after we have checked that the sintaxis is correct
+  def evaluate(self): # función que evalúa la expresión después de haber comprobado que la sintaxis es correcta
 
     value = self.check()
 
@@ -103,7 +111,7 @@ class expression(Check): # class that we use to define when we are working with 
       ast = AST(None)
       tree = ast.create_ast(self.array, "operator", "delimeter")
 
-      # we will begin evaluating only the ¬ because have more precendent than the other expresions
+      # comenzaremos evaluando solo la ¬ porque tiene más precedencia que las otras expresiones
 
       simplificator = TreeSimplification()
       
@@ -111,5 +119,4 @@ class expression(Check): # class that we use to define when we are working with 
 
       result = self.evaluate_node(tree)
 
-      return result.value # we return the result
-      
+      return result.value # devolvemos el resultado

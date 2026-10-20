@@ -27,6 +27,7 @@ class TreeSimplification:
                 if ((isinstance(actual_node.central_node, Operator) == True) and actual_node.central_node.operator == "¬"): # if the node is an operation and its ¬
                 
                     # we check if its have sons, its and  and if the operator is ¬
+                    
                     node = actual_node.right_node # we put this into node so tahat we don't have to worry aboiut to much node.node. ...
             
                     if ((isinstance(node.central_node, Operator) == True) and node.central_node != None and node.central_node.operator == "¬"):
@@ -36,8 +37,11 @@ class TreeSimplification:
                         if (node.central_node != None and isinstance(node.central_node, Proposition) == True):
 
                             # we write ¬¬p = p
+
                             actual_node = node.central_node
+
                             actual_node.right_node = None 
+
                             actual_node.left_node = None
                             node_null = True
                         
@@ -51,14 +55,19 @@ class TreeSimplification:
         return actual_node # we return the tree
 
 
-    
+    def simplify(self,actual_node):
+
+        node_null = None
+
+        return actual_node
+
 
     def simplify(self, tree): # function that simplifies the tree
     # we are only going to program those functions that simplify the tree
 
         # first simplification ¬ ¬ p == p
 
-        if (tree.right_node != None): # if the ones bellow thsi node are not null we call this function again(the simplify tree)
+        if (tree.right_node != None): # if the ones bellow this node are not null we call this function again(the simplify tree)
     
             tree.right_node = self.simplify(tree.right_node)
     

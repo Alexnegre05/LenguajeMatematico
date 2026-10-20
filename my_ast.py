@@ -1,8 +1,8 @@
-# an AST is a class that transforms the list of operations into a tree making more easy the evaluation of the elements
-# because the AST will be used by more than one folder,we are going to put this file outside every folder
+# un AST es una clase que transforma la lista de operaciones en un árbol facilitando la evaluación de los elementos
+# debido a que el AST se utilizará en más de una carpeta, vamos a colocar este archivo fuera de todas las carpetas
 class AST():
 
-    # precedence is a dictionary that contains how the operation works(the precedence)
+    # precedence es un diccionario que contiene cómo funciona la operación (la precedencia)
     precedence = {
         "¬":5,
         "^":4,
@@ -13,7 +13,7 @@ class AST():
     }
 
     
-    def __init__(self, central_node, right_node = None, left_node = None): # it needs a central node and two childs that can be none
+    def __init__(self, central_node, right_node = None, left_node = None): # necesita un nodo central y dos hijos que pueden ser nulos
 
         self.central_node = central_node
         self.right_node = right_node
@@ -21,35 +21,35 @@ class AST():
 
 
 
-    def create_ast(self, array, type, delimeter_type): # here we want to know for the array of elements 
-        # if there is an element with the least precedence, that will be the first node
+    def create_ast(self, array, type, delimeter_type): # aquí queremos saber, para el array de elementos, 
+        # si hay un elemento con la menor precedencia; ese será el primer nodo
 
 
-        # base case for recursivity
-        if (len(array) == 0): # case for negative ¬ it can happen that one node is None
+        # caso base para la recursividad
+        if (len(array) == 0): # caso para el negativo ¬; puede ocurrir que un nodo sea None
             return None
         else:
-            if (len(array)== 1): # if for recursivity we only have one element
+            if (len(array)== 1): # si por recursividad solo tenemos un elemento
                 return AST(array[0])
 
             
-        position = 0 # we use position to know what was the position of the least precedence, in case of more than one we chose the one of the right
+        position = 0 # usamos position para saber cuál fue la posición de menor precedencia; en caso de haber más de una, elegimos la de la derecha
 
-        delimeter_level = 0 # a variable that counts if we are inside one,two or more delimiters,
-        # we add one when we found a ( and we substract one when we found a )
+        delimeter_level = 0 # una variable que cuenta si estamos dentro de uno, dos o más delimitadores,
+        # sumamos uno cuando encontramos un ( y restamos uno cuando encontramos un )
         
         self.central_node = None
 
-        position_array = -1 # we declare this function that keeps what is the position of the array
+        position_array = -1 # declaramos esta función que guarda cuál es la posición del array
         for i in range(len(self.precedence)-1, -1,-1):
             
 
-            if (self.central_node == None): # this is to make less loops
+            if (self.central_node == None): # esto sirve para hacer menos bucles
                 position = position + 1
                 for j in range(0, len(array)):
 
-                    # for each element we search with another for if there is a ( before thsi operator and add 1 to delimeters level
-                    delimeter_level = 0 # we turn again the variable into 0
+                    # para cada elemento buscamos con otro for si hay un ( antes de este operador y sumamos 1 al nivel de delimitadores
+                    delimeter_level = 0 # volvemos a poner la variable en 0
                     for k in range(0, j):
 
                         if (hasattr(array[k], delimeter_type) == True and getattr(array[k], delimeter_type) == "("):
@@ -59,40 +59,40 @@ class AST():
                             if (hasattr(array[k], delimeter_type) == True and getattr(array[k], delimeter_type) == ")"):
                                 delimeter_level = delimeter_level - 1
 
-                    # if the element that we are looking for is inside a delimeter, 
-                    # with continue we make that the for goes to the next iteraton of the loop instead of creating the node
-                    # so that the central node will always be outside the delimeters
+                    # si el elemento que estamos buscando está dentro de un delimitador,
+                    # con continue hacemos que el for pase a la siguiente iteración del bucle en lugar de crear el nodo
+                    # para que el nodo central siempre quede fuera de los delimitadores
 
                     if (delimeter_level > 0):
                         continue
 
-                    # since we can not use isinstance, we use hasastr for has an atribute
-                    # is hasastr(object, "name of the atribute"), example hasatr(array[i], operator) for self,operator...
-                    # we put this in general by working with type
+                    # dado que no podemos usar isinstance, usamos hasattr para verificar si tiene un atributo
+                    # es hasattr(objeto, "nombre del atributo"), ejemplo hasattr(array[i], operador) para self.operator...
+                    # ponemos esto de forma general trabajando con type
 
-                    # get atttr it gives you the atribute
+                    # getattr te devuelve el atributo
                     if (hasattr(array[j], type) == True and position == self.precedence[getattr(array[j], type)]):
-                    # we also check if the precedence is the same
-                        self.central_node = array[j] # we put this as a central node, note that since this for will end at the last element the central node is the last element with least precedence
-                        position_array = j # we keep the position where we have found the last operator
+                    # también comprobamos si la precedencia es la misma
+                        self.central_node = array[j] # colocamos esto como nodo central; nota que como este for terminará en el último elemento, el nodo central será el último elemento con menor precedencia
+                        position_array = j # guardamos la posición donde hemos encontrado el último operador
 
 
-        # outside the for
+        # fuera del for
 
-        # for the delimeters
+        # para los delimitadores
 
         new_array = []
-        if (position_array == -1): # if its -1 then we know that we have found a delimeter since we have enter into the continue instead of what comes next
-        # that is evaluating the value of position_array
-            # know we want to know if inside this array that we are looking for the first element is a ( and the last one a )
+        if (position_array == -1): # si es -1 sabemos que hemos encontrado un delimitador ya que entramos en el continue en lugar de lo siguiente
+        # que es evaluar el valor de position_array
+            # ahora queremos saber si dentro de este array que estamos buscando el primer elemento es un ( y el último un )
             if (hasattr(array[0], delimeter_type) == True and getattr(array[0], delimeter_type) == "("):
                 
                 if (hasattr(array[len(array)-1], delimeter_type) == True and getattr(array[len(array)-1], delimeter_type) == ")"):
 
-                    for i in range(1, len(array)-1): # we create a nem list that contains what is inside the delimeters
+                    for i in range(1, len(array)-1): # creamos una lista nueva que contenga lo que está dentro de los delimitadores
                         new_array.append(array[i])
 
-                    # once we have created this array we call the function recursive witha return
+                    # una vez que hemos creado este array, llamamos a la función recursiva con un return
 
                     return self.create_ast(new_array, type, delimeter_type)
 
@@ -101,8 +101,8 @@ class AST():
         left_list = []
 
 
-        for i in range(0, len(array)): # another for but now to create the 2 lists that will be the right and left node,
-            # we use the position array element to know if it will be on the right or on the left
+        for i in range(0, len(array)): # otro for pero ahora para crear las 2 listas que serán el nodo derecho e izquierdo,
+            # usamos el elemento position_array para saber si estará a la derecha o a la izquierda
                    
         
             if(i < position_array):
@@ -113,14 +113,11 @@ class AST():
                 if (i > position_array):
                     right_list.append(array[i])
         
-        # now we use recursivity and we call the same function again but for each array
+        # ahora usamos recursividad y llamamos de nuevo a la misma función pero para cada array
         right_branch = self.create_ast(right_list, type, delimeter_type)
         left_branch = self.create_ast(left_list, type, delimeter_type)
         
-        # we use the right and the left to create the AST and return it(recursivity)
+        # usamos la derecha y la izquierda para crear el AST y devolverlo (recursividad)
         new_node = AST(self.central_node, right_branch, left_branch)
         
         return new_node
-
-
-

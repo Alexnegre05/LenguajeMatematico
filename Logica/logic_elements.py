@@ -1,16 +1,16 @@
-# Document where we put the definitions of the elements we are going to use in logic
+# Documento donde ponemos las definiciones de los elementos que vamos a usar en la lógica
 
-class Logic(): # general class that controls everything about logic
+class Logic(): # clase general que controla todo lo relacionado con la lógica
 
   pass
 
 
 
-class Proposition(Logic): # class that contains a proposition, it can be false(0) or true(1)
+class Proposition(Logic): # clase que contiene una proposición, puede ser falsa(0) o verdadera(1)
 
   def __init__(self, value):
 
-    if (value == 0 or value == 1): # checks if the value is correct or not
+    if (value == 0 or value == 1): # comprueba si el valor es correcto o no
         self.value = value
 
     else:
@@ -19,19 +19,19 @@ class Proposition(Logic): # class that contains a proposition, it can be false(0
 
 
 
-class Operator(Logic): # class that defines every operator that we need in logic
+class Operator(Logic): # clase que define cada operador que necesitamos en la lógica
 
-# the ¬ is done by alt gr +, the arrow by adding - + > (of greater)
+# el ¬ se hace con alt gr +, la flecha añadiendo - + > (de mayor que)
 
   def __init__(self, operator):
 
-    if(operator == "^" or operator == "v" or operator == "¬" or operator == "-->" or operator == "<-->"):  # checks if the operator is valid
+    if(operator == "^" or operator == "v" or operator == "¬" or operator == "-->" or operator == "<-->"):  # comprueba si el operador es válido
       self.operator = operator
 
     else:
       raise Exception("Operator not valid")
 
-class Delimeter(Logic): # class that defines the () 
+class Delimeter(Logic): # clase que define los () 
 
   def __init__(self, delimeter):
     
