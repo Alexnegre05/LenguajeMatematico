@@ -12,9 +12,9 @@ class Check(Logica):
     
     
 
-        count_delimiters_left = 0
+        contador_parentesis_izquierda = 0
        
-        count_delimiters_right = 0
+        contador_parentesis_derecha = 0
        
         for i in range (0, len(self.array)):
           
@@ -22,18 +22,18 @@ class Check(Logica):
     
             if (self.array[i].parentesis == ")"):
               
-              count_delimiters_right = count_delimiters_right + 1
+              contador_parentesis_derecha = contador_parentesis_derecha + 1
             else:
              
-              count_delimiters_left = count_delimiters_left + 1
+              contador_parentesis_izquierda = contador_parentesis_izquierda + 1
 
-            if (count_delimiters_right > count_delimiters_left): 
+            if (contador_parentesis_derecha > contador_parentesis_izquierda): 
             
               raise Exception("the delimiters right and left are not equal")
 
         # comprobamos que los delimitadores tengan el mismo número de ( que de ) al final de el for
 
-        if count_delimiters_left != count_delimiters_right: 
+        if contador_parentesis_izquierda != contador_parentesis_derecha: 
 
           raise Exception("the delimiters right and left are not equal")
     
@@ -54,7 +54,7 @@ class Check(Logica):
     if (len(self.array) < 2 or isinstance(self.array[0], Parentesis) == False or self.array[0].parentesis != "(" or isinstance(self.array[-1], Parentesis) == False or self.array[-1].delimiter != ")"):
       return 0
     
-    count_delimiters = 1
+    contador_parentesis = 1
 
     # dado que la primera y la ultima linea de el array ya sabemos que hay ( y hay ) 
     # el for puede empezar una posicion despues y finalizar una posicion antes
@@ -65,18 +65,18 @@ class Check(Logica):
       if (isinstance(self.array[i],Parentesis) == True):
 
         if (self.array[i].parentesis == "("): # sumamos uno cuando encontramos ( y restamos uno para )
-          count_delimiters = count_delimiters + 1
+          contador_parentesis = contador_parentesis + 1
 
         else:
-          count_delimiters = count_delimiters - 1
+          contador_parentesis = contador_parentesis - 1
 
       # Si el contador llega a 0 ANTES del final, significa que los paréntesis no son exteriores
       # Ejemplo: (p ^ q) ^ (r v s) -> Rompe aquí en el primer ')' because no envuelve todo
        
-      if count_delimiters == 0:
+      if contador_parentesis == 0:
         return 0
 
-    if count_delimiters == 1: # si ha encontrado parentesis
+    if contador_parentesis == 1: # si ha encontrado parentesis
       return 1
 
 
@@ -92,7 +92,7 @@ class Check(Logica):
     if len(self.array) < 4: # si es menor a 4 no puede pasar que tengamos [(,(,),)]
         return 0
     
-    value_iterator = -1
+    valor_iteracion = -1
     
 
     for i in range(len(self.array)- 2,-1,-1): # vamos hasta -1 para el caso del 0
@@ -103,40 +103,40 @@ class Check(Logica):
         
         if(isinstance(self.array[i + 1], Parentesis) == True and self.array[i+1].parentesis == ")"):
 
-          value_iterator = i
+          valor_iteracion = i
           break
 
 
     # otro for pero comprobamos si hemos encontrado otros delimitadores,
     # el if inicial es para evitar tener que hacer el for en caso de que no hayamos encontrado ))
 
-    if (value_iterator != -1):
+    if (valor_iteracion != -1):
 
-      number_of_delimeters = 0 # usamos esto para comprobar si el número es correcto y saber si tenemos o no que eliminar los delimitadores
+      numero_de_parentesis = 0 # usamos esto para comprobar si el número es correcto y saber si tenemos o no que eliminar los delimitadores
       # casos como ((p^q)) v (( r v s)) 
       
-      for i in range(value_iterator,-1,-1):
+      for i in range(valor_iteracion,-1,-1):
 
           if (isinstance(self.array[i], Parentesis) == True and self.array[i].parentesis == ")"):
            
-            number_of_delimeters = number_of_delimeters + 1
+            numero_de_parentesis = numero_de_parentesis + 1
          
           elif (isinstance(self.array[i], Parentesis) == True and self.array[i].parentesis == "("):
             
-            number_of_delimeters = number_of_delimeters -1  # restamos en este caso
+            numero_de_parentesis = numero_de_parentesis -1  # restamos en este caso
 
 
           # aquí comprobamos que todo esté bien
           # la misma comprobación pero para (, ya que sabemos por el elif que el último elemento es un ( solo tenemos que comprobar el anterior para el ((
           # el i >0 es para i -1
 
-          if (number_of_delimeters == 0 and i > 0):
+          if (numero_de_parentesis == 0 and i > 0):
             
-            if(isinstance(self.array[i - 1], Parentesis) == True and i != value_iterator and self.array[i-1].parentesis == "("): 
+            if(isinstance(self.array[i - 1], Parentesis) == True and i != valor_iteracion and self.array[i-1].parentesis == "("): 
               # estamos comprobando que la i va hacia atrás, por lo que en lugar de i+1 es i - 1
               
                # eliminamos las posiciones donde había un () extra
-              del self.array[value_iterator + 1]
+              del self.array[valor_iteracion + 1]
               del self.array[i - 1]
 
               return 1

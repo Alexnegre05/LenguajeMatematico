@@ -55,81 +55,82 @@ class Operacion(Logica): # clase que toma dos proposiciones y una operación y d
 
   def Resultado(self):
 
-      Proposition1 = self.proposicion1.value
-      Operator = self.operador.operador
+      Porposicion1 = self.proposicion1.value
+      Operador = self.operador.operador
 
       # Cambiado a "is None" para solucionar AttributeError
-      if (Operator == "¬" and self.proposicion2 is None):
-        Proposition2 = None
+      if (Operador == "¬" and self.proposicion2 is None):
+        Proposicion2 = None
 
       else:
-        Proposition2 = self.proposicion2.value
+        Proposicion2 = self.proposicion2.value
 
-      if (Operator == "^"): # comprobamos uno por uno qué operador estamos usando
+      if (Operador == "^"): # comprobamos uno por uno qué operador estamos usando
 
         # vamos caso por caso
-        if (Proposition1 == 0 and Proposition2 == 0):
+        if (Porposicion1 == 0 and Proposicion2 == 0):
           return 0
 
-        elif (Proposition1 == 1 and Proposition2 == 0):
+        elif (Porposicion1 == 1 and Proposicion2 == 0):
           return 0
 
-        elif (Proposition1 == 0 and Proposition2 == 1):
+        elif (Porposicion1 == 0 and Proposicion2 == 1):
           return 0
 
-        elif (Proposition1 == 1 and Proposition2 == 1):
+        elif (Porposicion1 == 1 and Proposicion2 == 1):
           return 1
 
       # hacemos lo mismo para los otros operadores
-      elif (Operator == "v"):
+      elif (Operador == "v"):
 
 
-        if (Proposition1 == 0 and Proposition2 == 0):
+        if (Porposicion1 == 0 and Proposicion2 == 0):
           return 0
 
-        elif (Proposition1 == 1 and Proposition2 == 0):
+        elif (Porposicion1 == 1 and Proposicion2 == 0):
           return 1
 
-        elif (Proposition1 == 0 and Proposition2 == 1):
+        elif (Porposicion1 == 0 and Proposicion2 == 1):
           return 1
 
-        elif (Proposition1 == 1 and Proposition2 == 1):
+        elif (Porposicion1 == 1 and Proposicion2 == 1):
           return 1
 
-      elif (Operator == "-->"):
+      elif (Operador == "-->"):
 
 
-        if (Proposition1 == 0 and Proposition2 == 0):
+        if (Porposicion1 == 0 and Proposicion2 == 0):
           return 1
 
-        elif (Proposition1 == 1 and Proposition2 == 0):
+        elif (Porposicion1 == 1 and Proposicion2 == 0):
           return 0
 
-        elif (Proposition1 == 0 and Proposition2 == 1):
+        elif (Porposicion1 == 0 and Proposicion2 == 1):
           return 1
 
-        elif (Proposition1 == 1 and Proposition2 == 1):
+        elif (Porposicion1 == 1 and Proposicion2 == 1):
           return 1
 
 
-      elif (Operator == "<-->"):
+      elif (Operador == "<-->"):
 
 
-        if (Proposition1 == 0 and Proposition2 == 0):
+        if (Porposicion1 == 0 and Proposicion2 == 0):
           return 1
 
-        elif (Proposition1 == 1 and Proposition2 == 0):
+        elif (Porposicion1 == 1 and Proposicion2 == 0):
           return 0
 
-        elif (Proposition1 == 0 and Proposition2 == 1):
+        elif (Porposicion1 == 0 and Proposicion2 == 1):
           return 0
 
-        elif (Proposition1 == 1 and Proposition2 == 1):
+        elif (Porposicion1 == 1 and Proposicion2 == 1):
           return 1
 
-      elif (Operator == "¬"): # caso especial, la negación
+      elif (Operador == "¬"): # caso especial, la negación
 
-        if (Proposition1 == 0):
+        if (Porposicion1 == 0):
           return 1
+        
         else:
           return 0

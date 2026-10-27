@@ -6,7 +6,7 @@ from binary_operation import  Proposicion, Operador, Operacion
 from my_ast import AST # importamos el AST
 from logic_elements import Logica
 from check_expressions import Check
-from simplify_tree import TreeSimplification
+from simplify_tree import SimplificadorArbol
 
 
 class expresion(Check): # clase que usamos para definir cuándo estamos trabajando con múltiples proposiciones y operaciones
@@ -113,7 +113,7 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
       # comenzaremos evaluando solo la ¬ porque tiene más precedencia que las otras expresiones
 
-      simplificator = TreeSimplification()
+      simplificator = SimplificadorArbol()
       
       tree = simplificator.simplificar(tree)
 

@@ -6,7 +6,7 @@ from logic_elements import  Operador, Proposicion
 
 
 
-class TreeSimplification:
+class SimplificadorArbol:
     
     def __init__(self):
         pass
@@ -58,22 +58,22 @@ class TreeSimplification:
 
 
 
-    def simplificar(self, tree): # function that simplifies the tree
+    def simplificar(self, arbol): # function that simplifies the tree
     # we are only going to program those functions that simplify the tree
 
         # first simplification ¬ ¬ p == p
 
-        if (tree.nodo_derecha != None): # if the ones bellow this node are not null we call this function again(the simplify tree)
+        if (arbol.nodo_derecha != None): # if the ones bellow this node are not null we call this function again(the simplify tree)
     
-            tree.nodo_derecha = self.simplificar(tree.nodo_derecha)
+            arbol.nodo_derecha = self.simplificar(arbol.nodo_derecha)
     
-        if (tree.nodo_izquierda != None):
+        if (arbol.nodo_izquierda != None):
             
-            tree.nodo_izquierda = self.simplificar(tree.nodo_izquierda)
+            arbol.nodo_izquierda = self.simplificar(arbol.nodo_izquierda)
 
-        tree = self.simplificar_doble_negacion(tree) # here we recibe the first node 
+        arbol = self.simplificar_doble_negacion(arbol) # here we recibe the first node 
 
         
     
     
-        return tree # at the end we return the tree # once we are done with the recursive
+        return arbol # at the end we return the tree # once we are done with the recursive
