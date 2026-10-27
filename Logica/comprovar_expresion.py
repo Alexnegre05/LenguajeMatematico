@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from binary_operation import Logica, Proposicion, Operador, Parentesis, Operacion
+from Logica.operaciones_binarias import Logica, Proposicion, Operador, Parentesis, Operacion
 
 class Check(Logica):
 

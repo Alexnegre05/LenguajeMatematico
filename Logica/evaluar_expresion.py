@@ -2,11 +2,11 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from binary_operation import  Proposicion, Operador, Operacion
-from my_ast import AST # importamos el AST
-from logic_elements import Logica
-from check_expressions import Check
-from simplify_tree import SimplificadorArbol
+from Logica.operaciones_binarias import  Proposicion, Operador, Operacion
+from mi_ast import AST # importamos el AST
+from Logica.clases_logica import Logica
+from Logica.comprovar_expresion import Check
+from Logica.arbol_simplificacion import SimplificadorArbol
 
 
 class expresion(Check): # clase que usamos para definir cuándo estamos trabajando con múltiples proposiciones y operaciones

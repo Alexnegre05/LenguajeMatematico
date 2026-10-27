@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from logic_elements import  Operador, Proposicion
+from Logica.clases_logica import  Operador, Proposicion
 
 
 
