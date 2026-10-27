@@ -3,8 +3,8 @@ import os # usamos esta libreria por tema de problemas de importaciones entre li
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from Logica.clases_logica import Logica, Proposicion, Operador, Parentesis
-from Logica.evaluar_expresion import expresion
+from Logica.modelos import Logica, Proposicion, Operador, Parentesis
+from Logica.validaciones import expresion
 
 
 

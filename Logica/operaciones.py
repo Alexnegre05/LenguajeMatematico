@@ -1,4 +1,4 @@
-from Logica.clases_logica import Logica, Proposicion, Parentesis, Operador
+from Logica.modelos import Logica, Proposicion, Parentesis, Operador
 
 
 
