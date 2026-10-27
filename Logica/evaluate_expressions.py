@@ -2,14 +2,14 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from binary_operation import Logic, Proposicion, Operador, Parentesis, Operation
+from binary_operation import  Proposicion, Operador, Operacion
 from my_ast import AST # importamos el AST
 
 from check_expressions import Check
 from simplify_tree import TreeSimplification
 
 
-class expression(Check): # clase que usamos para definir cuándo estamos trabajando con múltiples proposiciones y operaciones
+class expresion(Check): # clase que usamos para definir cuándo estamos trabajando con múltiples proposiciones y operaciones
 
   def __init__(self, array):
 
@@ -30,7 +30,7 @@ class expression(Check): # clase que usamos para definir cuándo estamos trabaja
 
 
 
-  def binary_operation(self, operation): # recibe la cadena y la operación que quieres resolver y devuelve una respuesta
+  def operacion_binaria(self, operation): # recibe la cadena y la operación que quieres resolver y devuelve una respuesta
 
       copy_array = []
       i = 0
@@ -38,9 +38,9 @@ class expression(Check): # clase que usamos para definir cuándo estamos trabaja
       while (i < len(self.array)):
 
         if ((isinstance(self.array[i], Operador) == True) and self.array[i].operator == operation):
-            result = Operation(self.array[i-1], self.array[i], self.array[i + 1])
+            result = Operacion(self.array[i-1], self.array[i], self.array[i + 1])
 
-            value = result.Result()
+            value = result.Resultado()
             p = Proposicion(value)
 
             copy_array.pop() # restamos la última proposición ya que ahora forma parte de la operación que queremos resolver, usamos pop para ello
@@ -61,7 +61,7 @@ class expression(Check): # clase que usamos para definir cuándo estamos trabaja
 
 
   # función que evalúa un nodo del AST y calcula un valor
-  def evaluate_node(self,node):
+  def evaluar_nodo(self,node):
 
     if (node == None): # si es nulo devolvemos nulo
       return None
@@ -74,18 +74,18 @@ class expression(Check): # clase que usamos para definir cuándo estamos trabaja
 
     # si es un operador evaluamos la izquierda y la derecha en la función
 
-    right = self.evaluate_node(node.right_node)
+    right = self.evaluar_nodo(node.right_node)
     
-    left = self.evaluate_node(node.left_node)
+    left = self.evaluar_nodo(node.left_node)
 
     # ahora que sabemos que tenemos un operador calculamos la operación, tenemos que separar el caso de ¬ de los demás
     if (node.central_node.operator == "¬"):
 
-      operation = Operation(right, node.central_node, None)
+      operation = Operacion(right, node.central_node, None)
     else:
-      operation = Operation(left, node.central_node, right)
+      operation = Operacion(left, node.central_node, right)
 
-    result = operation.Result()
+    result = operation.Resultado()
 
     # tenemos que poner el resultado dentro de una nueva proposición
     p = Proposicion(result)
@@ -99,7 +99,7 @@ class expression(Check): # clase que usamos para definir cuándo estamos trabaja
 
 
 
-  def evaluate(self): # función que evalúa la expresión después de haber comprobado que la sintaxis es correcta
+  def evaluar(self): # función que evalúa la expresión después de haber comprobado que la sintaxis es correcta
 
     value = self.check()
 
@@ -109,14 +109,14 @@ class expression(Check): # clase que usamos para definir cuándo estamos trabaja
     else:
 
       ast = AST(None)
-      tree = ast.create_ast(self.array, "operator", "delimeter")
+      tree = ast.crear_ast(self.array, "operator", "delimeter")
 
       # comenzaremos evaluando solo la ¬ porque tiene más precedencia que las otras expresiones
 
       simplificator = TreeSimplification()
       
-      tree = simplificator.simplify(tree)
+      tree = simplificator.simplificar(tree)
 
-      result = self.evaluate_node(tree)
+      result = self.evaluar_nodo(tree)
 
       return result.value # devolvemos el resultado

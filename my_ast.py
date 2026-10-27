@@ -22,7 +22,7 @@ class AST():
 
 
 
-    def create_ast(self, array, type, delimeter_type): # aquí queremos saber, para el array de elementos, 
+    def crear_ast(self, array, type, delimeter_type): # aquí queremos saber, para el array de elementos, 
         
         # si hay un elemento con la menor precedencia; ese será el primer nodo
 
@@ -109,7 +109,7 @@ class AST():
 
                     # una vez que hemos creado este array, llamamos a la función recursiva con un return
 
-                    return self.create_ast(new_array, type, delimeter_type)
+                    return self.crear_ast(new_array, type, delimeter_type)
 
 
         right_list = []
@@ -122,9 +122,9 @@ class AST():
         right_list = array[position_array + 1:len(array)]
         
         # ahora usamos recursividad y llamamos de nuevo a la misma función pero para cada array
-        right_branch = self.create_ast(right_list, type, delimeter_type)
+        right_branch = self.crear_ast(right_list, type, delimeter_type)
         
-        left_branch = self.create_ast(left_list, type, delimeter_type)
+        left_branch = self.crear_ast(left_list, type, delimeter_type)
         
         # usamos la derecha y la izquierda para crear el AST y devolverlo (recursividad)
         new_node = AST(self.central_node, right_branch, left_branch)

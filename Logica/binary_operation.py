@@ -3,40 +3,40 @@ from logic_elements import Logica, Proposicion, Parentesis, Operador
 
 
 
-class Operation(Logica): # clase que toma dos proposiciones y una operación y devuelve un valor de 0 o 1
+class Operacion(Logica): # clase que toma dos proposiciones y una operación y devuelve un valor de 0 o 1
 
 
-  def __init__(self, Proposition1, operator, Proposition2):
+  def __init__(self, Proposicion1, operador, Proposicion2):
 
-    if (isinstance(Proposition1,Proposicion) == True and isinstance(operator, Operador) == True and isinstance(Proposition2,Proposicion) == True): # usamos isinstance para saber si pertenece a una clase concreta
+    if (isinstance(Proposicion1,Proposicion) == True and isinstance(operador, Operador) == True and isinstance(Proposicion2,Proposicion) == True): # usamos isinstance para saber si pertenece a una clase concreta
 
-        self.Proposition1 = Proposition1
-        self.operator = operator
-        self.Proposition2 = Proposition2
+        self.Proposition1 = Proposicion1
+        self.operator = operador
+        self.Proposition2 = Proposicion2
 
     else:
 
-      if (isinstance(Proposition1,Proposicion) == True and isinstance(operator, Operador) == True and operator.operator == "¬"): # caso exclusivo para la negación
+      if (isinstance(Proposicion1,Proposicion) == True and isinstance(operador, Operador) == True and operador.operator == "¬"): # caso exclusivo para la negación
 
-        self.Proposition1 = Proposition1
-        self.operator = operator
+        self.Proposition1 = Proposicion1
+        self.operator = operador
         self.Proposition2 = None # ponemos la proposición 2 como None para saber que está vacía
 
 
 
 
       # mensaje personal de error
-      if (isinstance(Proposition1,Proposicion) == False):
+      if (isinstance(Proposicion1,Proposicion) == False):
         
         raise Exception("The first proposition introduced is not a valid proposition")
 
-      elif (isinstance(operator, Operador) == False):
+      elif (isinstance(operador, Operador) == False):
         
         raise Exception("the operator introduced is not a valid operator")
 
-      elif (isinstance(Proposition2,Proposicion) == False):
+      elif (isinstance(Proposicion2,Proposicion) == False):
 
-        if(isinstance(Proposition1,Proposicion) == True and isinstance(operator, Operador) == True and operator.operator == "¬"):
+        if(isinstance(Proposicion1,Proposicion) == True and isinstance(operador, Operador) == True and operador.operator == "¬"):
           pass
 
         else:
@@ -53,7 +53,7 @@ class Operation(Logica): # clase que toma dos proposiciones y una operación y d
 
 
 
-  def Result(self):
+  def Resultado(self):
 
       Proposition1 = self.Proposition1.value
       Operator = self.operator.operator

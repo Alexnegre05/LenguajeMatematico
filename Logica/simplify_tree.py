@@ -11,7 +11,7 @@ class TreeSimplification:
     def __init__(self):
         pass
 
-    def simplify_double_negation(self, actual_node): # function that simplify the double negation
+    def simplificar_doble_negacion(self, actual_node): # function that simplify the double negation
 
 
         node_null = False # if we find that a node is null we stop searching 
@@ -55,27 +55,23 @@ class TreeSimplification:
         return actual_node # we return the tree
 
 
-    def simplify(self,actual_node):
-
-        node_null = None
-
-        return actual_node
 
 
-    def simplify(self, tree): # function that simplifies the tree
+
+    def simplificar(self, tree): # function that simplifies the tree
     # we are only going to program those functions that simplify the tree
 
         # first simplification ¬ ¬ p == p
 
         if (tree.right_node != None): # if the ones bellow this node are not null we call this function again(the simplify tree)
     
-            tree.right_node = self.simplify(tree.right_node)
+            tree.right_node = self.simplificar(tree.right_node)
     
         if (tree.left_node != None):
             
-            tree.left_node = self.simplify(tree.left_node)
+            tree.left_node = self.simplificar(tree.left_node)
 
-        tree = self.simplify_double_negation(tree) # here we recibe the first node 
+        tree = self.simplificar_doble_negacion(tree) # here we recibe the first node 
 
         
     

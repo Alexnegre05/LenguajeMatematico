@@ -2,12 +2,12 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from binary_operation import Logica, Proposicion, Operador, Parentesis, Operation
+from binary_operation import Logica, Proposicion, Operador, Parentesis, Operacion
 
 class Check(Logica):
 
  
-  def check_delimeters(self):
+  def check_parentesis(self):
 
     
     
@@ -47,7 +47,7 @@ class Check(Logica):
 
   # aquí tenemos una función que elimina solo los delimitadores primeros y últimos si empezamos con un delimitador y terminamos con otro diferente
   # ejemplo de (p^q) a solo p^q, también tenemos que tener cuidado con casos como (p^q)^(pvq) porque aquí no podemos eliminar los delimitadores
-  def eliminate_exterior_delimiters(self):
+  def eliminar_parentesis_exteriores(self):
 
 
     # aquí comprobamos si tenemos un último ) y un primer (, si no, devolvemos 0
@@ -86,7 +86,7 @@ class Check(Logica):
 
 
 
-  def eliminate_redundant_delimiters(self): # devolveremos 1 solo si hemos encontrado un delimitador doble
+  def eliminar_parentesis_redundantes(self): # devolveremos 1 solo si hemos encontrado un delimitador doble
     # vamos hacia atrás
     
     if len(self.array) < 4: # si es menor a 4 no puede pasar que tengamos [(,(,),)]
@@ -151,14 +151,14 @@ class Check(Logica):
 
   def check(self): # función que comprueba si el array es correcto; devolverá 0 si no lo es y 1 si está todo correcto
 
-    self.check_delimeters() # comprobamos que todo lo relacionado con los delimitadores esté bien
+    self.check_parentesis() # comprobamos que todo lo relacionado con los delimitadores esté bien
 
     value = 1
 
     while (value == 1): # este código es para eliminar los delimitadores exteriores ( expresión )
     # el bucle es para el caso de más de un delimitador como (( expresión ))
 
-      value = self.eliminate_exterior_delimiters() # eliminamos si podemos los delimitadores exteriores, si recibimos un 1
+      value = self.eliminar_parentesis_exteriores() # eliminamos si podemos los delimitadores exteriores, si recibimos un 1
 
       if (value == 1):
         self.array.pop(0) # restamos el primer y el último elemento
@@ -169,7 +169,7 @@ class Check(Logica):
     value2 = 1
     while(value2 == 1):
       
-      value2 = self.eliminate_redundant_delimiters()
+      value2 = self.eliminar_parentesis_redundantes()
 
     length = len(self.array)
     i = 0 # (número que guarda la posición del array)

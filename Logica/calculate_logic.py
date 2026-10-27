@@ -3,7 +3,7 @@ import os # usamos esta libreria por tema de problemas de importaciones entre li
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from evaluate_expressions import Logica, Proposicion, Operador, Operation, expression, Parentesis
+from evaluate_expressions import Logica, Proposicion, Operador, Operacion, expresion, Parentesis
 
 
 
@@ -18,9 +18,9 @@ proposicion2 = Proposicion(0)
 delimeter1 = Parentesis("(")
 delimeter2 = Parentesis(")")
 
-expression = expression([ proposicion, operador,delimeter1, proposicion, operador, proposicion,operador,proposicion, delimeter2])
+expresion = expresion([ proposicion, operador,delimeter1, proposicion, operador, proposicion,operador,proposicion, delimeter2])
 
 
 
-value = expression.evaluate()
+value = expresion.evaluar()
 print(value)
