@@ -4,7 +4,7 @@
 class AST():
 
     # precedence es un diccionario que contiene cómo funciona la operación (la precedencia)
-    precedence = {
+    precedencia = {
         "¬":5,
         "^":4,
         "v":3,
@@ -14,65 +14,66 @@ class AST():
     }
 
     
-    def __init__(self, central_node, right_node = None, left_node = None): # necesita un nodo central y dos hijos que pueden ser nulos
+    def __init__(self, nodo_central, nodo_derecha = None, nodo_izquierda = None): # necesita un nodo central y dos hijos que pueden ser nulos
 
-        self.central_node = central_node
-        self.right_node = right_node
-        self.left_node = left_node
+        self.nodo_central = nodo_central
+        self.nodo_derecha = nodo_derecha
+        self.nodo_izquierda = nodo_izquierda
 
 
 
-    def crear_ast(self, array, type, delimeter_type): # aquí queremos saber, para el array de elementos, 
+    def crear_ast(self, lista, tipo, tipo_parentesis): # aquí queremos saber, para el array de elementos, 
         
         # si hay un elemento con la menor precedencia; ese será el primer nodo
 
 
         # caso base para la recursividad
-        if (len(array) == 0): # caso para el negativo ¬; puede ocurrir que un nodo sea None
+        if (len(lista) == 0): # caso para el negativo ¬; puede ocurrir que un nodo sea None
+            
             return None
        
         else:
          
-            if (len(array)== 1): # si por recursividad solo tenemos un elemento
+            if (len(lista)== 1): # si por recursividad solo tenemos un elemento
               
-                return AST(array[0])
+                return AST(lista[0]) # devolvemos el AST solo con ese nodo, sera el primero 
 
             
-        position = 0 # usamos position para saber cuál fue la posición de menor precedencia; en caso de haber más de una, elegimos la de la derecha
+        posicion = 0 # usamos position para saber cuál fue la posición de menor precedencia; en caso de haber más de una, elegimos la de la derecha
 
-        self.central_node = None
+        self.nodo_central = None
 
-        position_array = -1 # declaramos esta función que guarda cuál es la posición del array
+        posicion_lista = -1 # declaramos esta función que guarda cuál es la posición del array
         
-        for i in range(len(self.precedence)-1, -1,-1):
+        for i in range(len(self.precedencia)-1, -1,-1):
             
 
-            if (self.central_node == None): # esto sirve para hacer menos bucles
+            if (self.nodo_central == None): # esto sirve para hacer menos bucles
               
-                position = position + 1
+                posicion = posicion + 1
                 
                 # Llevamos el conteo del nivel de delimitadores en una sola pasada hacia adelante
                
-                delimeter_level = 0 
+                profundidad_parentesis = 0 
                 
-                for j in range(0, len(array)):
+                for j in range(0, len(lista)):
 
                     # Si el elemento actual es un '(' aumentamos el nivel ANTES de evaluar
-                    if (hasattr(array[j], delimeter_type) == True and getattr(array[j], delimeter_type) == "("):
+                    if (hasattr(lista[j], tipo_parentesis) == True and getattr(lista[j], tipo_parentesis) == "("):
                        
-                        delimeter_level = delimeter_level + 1
+                        profundidad_parentesis = profundidad_parentesis + 1
                         continue # Pasamos al siguiente elemento porque un '(' no puede ser nodo operador central
 
                    
                     # Si el elemento actual es un ')' reducimos el nivel DESPUÉS de evaluar
-                    if (hasattr(array[j], delimeter_type) == True and getattr(array[j], delimeter_type) == ")"):
+                    if (hasattr(lista[j], tipo_parentesis) == True and getattr(lista[j], tipo_parentesis) == ")"):
                        
-                        delimeter_level = delimeter_level - 1
+                        profundidad_parentesis = profundidad_parentesis - 1
                         continue # Pasamos al siguiente elemento
 
                     # si el elemento que estamos buscando está dentro de un delimitador, pasamos de largo
                     
-                    if (delimeter_level > 0):
+                    if (profundidad_parentesis > 0):
                         continue
 
                     # dado que no podemos usar isinstance, usamos hasattr para verificar si tiene un atributo
@@ -81,52 +82,52 @@ class AST():
 
                     # getattr te devuelve el atributo
                     
-                    if (hasattr(array[j], type) == True and position == self.precedence[getattr(array[j], type)]):
+                    if (hasattr(lista[j], tipo) == True and posicion == self.precedencia[getattr(lista[j], tipo)]):
                     
                     # también comprobamos si la precedencia es la misma
-                        self.central_node = array[j] # colocamos esto como nodo central; nota que como este for terminará en el último elemento, el nodo central será el último elemento con menor precedencia
-                        position_array = j # guardamos la posición donde hemos encontrado el último operador
+                        self.nodo_central = lista[j] # colocamos esto como nodo central; nota que como este for terminará en el último elemento, el nodo central será el último elemento con menor precedencia
+                        posicion_lista = j # guardamos la posición donde hemos encontrado el último operador
 
 
         # fuera del for
 
         # para los delimitadores
 
-        new_array = []
+        nueva_lista = []
 
-        if (position_array == -1): # si es -1 sabemos que hemos encontrado un delimitador ya que entramos en el continue en lugar de lo siguiente
+        if (posicion_lista == -1): # si es -1 sabemos que hemos encontrado un delimitador ya que entramos en el continue en lugar de lo siguiente
         
         # que es evaluar el valor de position_array
            
             # ahora queremos saber si dentro de este array que estamos buscando el primer elemento es un ( y el último un )
-            if (hasattr(array[0], delimeter_type) == True and getattr(array[0], delimeter_type) == "("):
+            if (hasattr(lista[0], tipo_parentesis) == True and getattr(lista[0], tipo_parentesis) == "("):
                 
                 
-                if (hasattr(array[-1], delimeter_type) == True and getattr(array[-1], delimeter_type) == ")"):
+                if (hasattr(lista[-1], tipo_parentesis) == True and getattr(lista[-1], tipo_parentesis) == ")"):
 
-                    for i in range(1, len(array)-1): # creamos una lista nueva que contenga lo que está dentro de los delimitadores
-                        new_array.append(array[i])
+                    for i in range(1, len(lista)-1): # creamos una lista nueva que contenga lo que está dentro de los delimitadores
+                        nueva_lista.append(lista[i])
 
                     # una vez que hemos creado este array, llamamos a la función recursiva con un return
 
-                    return self.crear_ast(new_array, type, delimeter_type)
+                    return self.crear_ast(nueva_lista, tipo, tipo_parentesis)
 
 
-        right_list = []
+        lista_derecha = []
 
-        left_list = []
+        lista_izquierda = []
 
         # cambiamos un for manual por slicing
         
-        left_list = array[0:position_array]
-        right_list = array[position_array + 1:len(array)]
+        lista_izquierda = lista[0:posicion_lista]
+        lista_derecha = lista[posicion_lista + 1:len(lista)]
         
         # ahora usamos recursividad y llamamos de nuevo a la misma función pero para cada array
-        right_branch = self.crear_ast(right_list, type, delimeter_type)
+        branca_derecha = self.crear_ast(lista_derecha, tipo, tipo_parentesis)
         
-        left_branch = self.crear_ast(left_list, type, delimeter_type)
+        branca_izquierda = self.crear_ast(lista_izquierda, tipo, tipo_parentesis)
         
         # usamos la derecha y la izquierda para crear el AST y devolverlo (recursividad)
-        new_node = AST(self.central_node, right_branch, left_branch)
+        nuevo_nodo = AST(self.nodo_central, branca_derecha, branca_izquierda)
         
-        return new_node
+        return nuevo_nodo
