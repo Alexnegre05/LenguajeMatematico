@@ -10,17 +10,17 @@ class Operacion(Logica): # clase que toma dos proposiciones y una operación y d
 
     if (isinstance(Proposicion1,Proposicion) == True and isinstance(operador, Operador) == True and isinstance(Proposicion2,Proposicion) == True): # usamos isinstance para saber si pertenece a una clase concreta
 
-        self.Proposition1 = Proposicion1
-        self.operator = operador
-        self.Proposition2 = Proposicion2
+        self.proposicion1 = Proposicion1
+        self.operador = operador
+        self.proposicion2 = Proposicion2
 
     else:
 
-      if (isinstance(Proposicion1,Proposicion) == True and isinstance(operador, Operador) == True and operador.operator == "¬"): # caso exclusivo para la negación
+      if (isinstance(Proposicion1,Proposicion) == True and isinstance(operador, Operador) == True and operador.operador == "¬"): # caso exclusivo para la negación
 
-        self.Proposition1 = Proposicion1
-        self.operator = operador
-        self.Proposition2 = None # ponemos la proposición 2 como None para saber que está vacía
+        self.proposicion1 = Proposicion1
+        self.operador = operador
+        self.proposicion2 = None # ponemos la proposición 2 como None para saber que está vacía
 
 
 
@@ -36,7 +36,7 @@ class Operacion(Logica): # clase que toma dos proposiciones y una operación y d
 
       elif (isinstance(Proposicion2,Proposicion) == False):
 
-        if(isinstance(Proposicion1,Proposicion) == True and isinstance(operador, Operador) == True and operador.operator == "¬"):
+        if(isinstance(Proposicion1,Proposicion) == True and isinstance(operador, Operador) == True and operador.operador == "¬"):
           pass
 
         else:
@@ -55,15 +55,15 @@ class Operacion(Logica): # clase que toma dos proposiciones y una operación y d
 
   def Resultado(self):
 
-      Proposition1 = self.Proposition1.value
-      Operator = self.operator.operator
+      Proposition1 = self.proposicion1.value
+      Operator = self.operador.operador
 
       # Cambiado a "is None" para solucionar AttributeError
-      if (Operator == "¬" and self.Proposition2 is None):
+      if (Operator == "¬" and self.proposicion2 is None):
         Proposition2 = None
 
       else:
-        Proposition2 = self.Proposition2.value
+        Proposition2 = self.proposicion2.value
 
       if (Operator == "^"): # comprobamos uno por uno qué operador estamos usando
 

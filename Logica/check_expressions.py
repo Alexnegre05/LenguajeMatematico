@@ -20,7 +20,7 @@ class Check(Logica):
           
           if (isinstance(self.array[i], Parentesis) == True):  # comprobamos si el elemento es un delimitador
     
-            if (self.array[i].delimeter == ")"):
+            if (self.array[i].parentesis == ")"):
               
               count_delimiters_right = count_delimiters_right + 1
             else:
@@ -51,7 +51,7 @@ class Check(Logica):
 
 
     # aquí comprobamos si tenemos un último ) y un primer (, si no, devolvemos 0
-    if (len(self.array) < 2 or isinstance(self.array[0], Parentesis) == False or self.array[0].delimeter != "(" or isinstance(self.array[-1], Parentesis) == False or self.array[-1].delimeter != ")"):
+    if (len(self.array) < 2 or isinstance(self.array[0], Parentesis) == False or self.array[0].parentesis != "(" or isinstance(self.array[-1], Parentesis) == False or self.array[-1].delimiter != ")"):
       return 0
     
     count_delimiters = 1
@@ -64,14 +64,14 @@ class Check(Logica):
 
       if (isinstance(self.array[i],Parentesis) == True):
 
-        if (self.array[i].delimeter == "("): # sumamos uno cuando encontramos ( y restamos uno para )
+        if (self.array[i].parentesis == "("): # sumamos uno cuando encontramos ( y restamos uno para )
           count_delimiters = count_delimiters + 1
 
         else:
           count_delimiters = count_delimiters - 1
 
       # Si el contador llega a 0 ANTES del final, significa que los paréntesis no son exteriores
-      # Ejemplo: (p ^ q) ^ (r v s) -> Rompe aquí en el primer ')' porque no envuelve todo
+      # Ejemplo: (p ^ q) ^ (r v s) -> Rompe aquí en el primer ')' because no envuelve todo
        
       if count_delimiters == 0:
         return 0
@@ -99,9 +99,9 @@ class Check(Logica):
           
 
       # hemos encontrado un delimitador doble que es )) 
-      if(isinstance(self.array[i], Parentesis) == True and self.array[i].delimeter == ")"):
+      if(isinstance(self.array[i], Parentesis) == True and self.array[i].parentesis == ")"):
         
-        if(isinstance(self.array[i + 1], Parentesis) == True and self.array[i+1].delimeter == ")"):
+        if(isinstance(self.array[i + 1], Parentesis) == True and self.array[i+1].parentesis == ")"):
 
           value_iterator = i
           break
@@ -117,11 +117,11 @@ class Check(Logica):
       
       for i in range(value_iterator,-1,-1):
 
-          if (isinstance(self.array[i], Parentesis) == True and self.array[i].delimeter == ")"):
+          if (isinstance(self.array[i], Parentesis) == True and self.array[i].parentesis == ")"):
            
             number_of_delimeters = number_of_delimeters + 1
          
-          elif (isinstance(self.array[i], Parentesis) == True and self.array[i].delimeter == "("):
+          elif (isinstance(self.array[i], Parentesis) == True and self.array[i].parentesis == "("):
             
             number_of_delimeters = number_of_delimeters -1  # restamos en este caso
 
@@ -132,7 +132,7 @@ class Check(Logica):
 
           if (number_of_delimeters == 0 and i > 0):
             
-            if(isinstance(self.array[i - 1], Parentesis) == True and i != value_iterator and self.array[i-1].delimeter == "("): 
+            if(isinstance(self.array[i - 1], Parentesis) == True and i != value_iterator and self.array[i-1].parentesis == "("): 
               # estamos comprobando que la i va hacia atrás, por lo que en lugar de i+1 es i - 1
               
                # eliminamos las posiciones donde había un () extra
@@ -142,6 +142,7 @@ class Check(Logica):
               return 1
 
     return 0
+
 
 
 
@@ -192,7 +193,7 @@ class Check(Logica):
           
           # aquí sabemos que esto es una operación, así que ahora comprobamos si el valor no es ¬
 
-          if (self.array[i].operator != "¬"):
+          if (self.array[i].operador != "¬"):
 
             return 0 # entonces sabemos que el primer elemento es ^... por lo que la expresión es incorrecta
 
@@ -210,7 +211,7 @@ class Check(Logica):
 
         if (isinstance(self.array[i], Parentesis) == True):
           
-          if (self.array[i].delimeter == "("):
+          if (self.array[i].parentesis == "("):
             return 0
 
         # CASO C: Si no es ni una Proposición ni un Delimitador (por ejemplo, termina en ^), es incorrecto
@@ -222,7 +223,7 @@ class Check(Logica):
 
         
         # caso especial p ¬ q si y solo si i >= 2 porque si no i - 2 podría estar fuera de rango
-        if (i >= 2 and isinstance(self.array[i], Proposicion) == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operator == "¬" and isinstance(self.array[i-2], Proposicion) == True):
+        if (i >= 2 and isinstance(self.array[i], Proposicion) == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operador == "¬" and isinstance(self.array[i-2], Proposicion) == True):
           return 0
 
       else: # el caso general
@@ -234,39 +235,39 @@ class Check(Logica):
 
         # hacemos lo mismo pero para los operadores, pero sin el ¬ no es la expresión que estamos viendo, ejemplo: esto es posible ^¬ porque luego va una p, pero esto no ¬^
 
-        if (isinstance(self.array[i], Operador) == True and isinstance(self.array[i-1], Operador) == True and self.array[i].operator != "¬"):
+        if (isinstance(self.array[i], Operador) == True and isinstance(self.array[i-1], Operador) == True and self.array[i].operador != "¬"):
 
           return 0
 
         # aquí comprobamos que no tengamos el caso de ¬ ¬
-        if (isinstance(self.array[i], Operador) == True and isinstance(self.array[i-1], Operador) == True and self.array[i].operator == "¬" and self.array[i-1].operator == "¬"):
+        if (isinstance(self.array[i], Operador) == True and isinstance(self.array[i-1], Operador) == True and self.array[i].operador == "¬" and self.array[i-1].operador == "¬"):
 
           return 0
 
         # aquí comprobamos que no tengamos el caso de p ¬ q y verificamos que i > 2
-        if (i >= 2 and isinstance(self.array[i], Proposicion) == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operator == "¬" and isinstance(self.array[i-2], Proposicion) == True):
+        if (i >= 2 and isinstance(self.array[i], Proposicion) == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operador == "¬" and isinstance(self.array[i-2], Proposicion) == True):
           return 0
 
 
         # casos de delimitadores 
 
          # CASO 1: Evitar un operador binario justo después de un paréntesis de apertura ej: ( ^ p)
-        if (isinstance(self.array[i-1], Parentesis) == True and self.array[i-1].delimeter == "(" and isinstance(self.array[i], Operador) == True and self.array[i].operator != "¬"):
+        if (isinstance(self.array[i-1], Parentesis) == True and self.array[i-1].parentesis == "(" and isinstance(self.array[i], Operador) == True and self.array[i].operador != "¬"):
           
           return 0
 
         # CASO 2: Evitar un paréntesis de cierre justo después de un operador ej: (p ^ )
-        if (isinstance(self.array[i-1], Operador) == True and isinstance(self.array[i], Parentesis) == True and self.array[i].delimeter == ")"):
+        if (isinstance(self.array[i-1], Operador) == True and isinstance(self.array[i], Parentesis) == True and self.array[i].parentesis == ")"):
           
           return 0
 
         # CASO 3: Evitar un paréntesis de apertura justo después de una proposición sin un operador ej: p ( q )
-        if (isinstance(self.array[i-1], Proposicion) == True and isinstance(self.array[i], Parentesis) == True and self.array[i].delimeter == "("):
+        if (isinstance(self.array[i-1], Proposicion) == True and isinstance(self.array[i], Parentesis) == True and self.array[i].parentesis == "("):
           
           return 0
 
         # CASO 4: Evitar una proposición justo después de un paréntesis de cierre sin un operador ej: ( p ) q
-        if (isinstance(self.array[i-1], Parentesis) == True and self.array[i-1].delimeter == ")" and isinstance(self.array[i], Proposicion) == True):
+        if (isinstance(self.array[i-1], Parentesis) == True and self.array[i-1].parentesis == ")" and isinstance(self.array[i], Proposicion) == True):
           
           return 0
 
@@ -280,3 +281,4 @@ class Check(Logica):
     # al final del bucle, si hemos llegado hasta aquí significa que todo está bien, por lo que enviamos un 1
 
     return 1
+

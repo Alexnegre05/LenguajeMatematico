@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from binary_operation import  Proposicion, Operador, Operacion
 from my_ast import AST # importamos el AST
-
+from logic_elements import Logica
 from check_expressions import Check
 from simplify_tree import TreeSimplification
 
@@ -37,7 +37,7 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
       while (i < len(self.array)):
 
-        if ((isinstance(self.array[i], Operador) == True) and self.array[i].operator == operation):
+        if ((isinstance(self.array[i], Operador) == True) and self.array[i].operador == operation):
             result = Operacion(self.array[i-1], self.array[i], self.array[i + 1])
 
             value = result.Resultado()
@@ -68,22 +68,22 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
     # este if es para el caso en el que tenemos el final de una rama del árbol
 
-    if (node.right_node == None and node.left_node == None):
+    if (node.nodo_derecha == None and node.nodo_izquierda == None):
 
-      return node.central_node
+      return node.nodo_central
 
     # si es un operador evaluamos la izquierda y la derecha en la función
 
-    right = self.evaluar_nodo(node.right_node)
+    right = self.evaluar_nodo(node.nodo_derecha)
     
-    left = self.evaluar_nodo(node.left_node)
+    left = self.evaluar_nodo(node.nodo_izquierda)
 
     # ahora que sabemos que tenemos un operador calculamos la operación, tenemos que separar el caso de ¬ de los demás
-    if (node.central_node.operator == "¬"):
+    if (node.nodo_central.operador == "¬"):
 
-      operation = Operacion(right, node.central_node, None)
+      operation = Operacion(right, node.nodo_central, None)
     else:
-      operation = Operacion(left, node.central_node, right)
+      operation = Operacion(left, node.nodo_central, right)
 
     result = operation.Resultado()
 
@@ -109,7 +109,7 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
     else:
 
       ast = AST(None)
-      tree = ast.crear_ast(self.array, "operator", "delimeter")
+      tree = ast.crear_ast(self.array, "operador", "parentesis")
 
       # comenzaremos evaluando solo la ¬ porque tiene más precedencia que las otras expresiones
 

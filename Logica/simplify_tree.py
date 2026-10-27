@@ -11,48 +11,48 @@ class TreeSimplification:
     def __init__(self):
         pass
 
-    def simplificar_doble_negacion(self, actual_node): # function that simplify the double negation
+    def simplificar_doble_negacion(self, nodo_actual): # function that simplify the double negation
 
 
-        node_null = False # if we find that a node is null we stop searching 
+        nodo_nulo = False # if we find that a node is null we stop searching 
 
-        while (node_null == False):
+        while (nodo_nulo == False):
         
-            if (actual_node.central_node == None): # we exit the while
+            if (nodo_actual.nodo_central == None): # we exit the while
         
-                node_null = True
+                nodo_nulo = True
         
             else:
         
-                if ((isinstance(actual_node.central_node, Operador) == True) and actual_node.central_node.operator == "¬"): # if the node is an operation and its ¬
+                if ((isinstance(nodo_actual.nodo_central, Operador) == True) and nodo_actual.nodo_central.operador == "¬"): # if the node is an operation and its ¬
                 
                     # we check if its have sons, its and  and if the operator is ¬
                     
-                    node = actual_node.right_node # we put this into node so tahat we don't have to worry aboiut to much node.node. ...
+                    nodo = nodo_actual.nodo_derecho # we put this into node so tahat we don't have to worry aboiut to much node.node. ...
             
-                    if ((isinstance(node.central_node, Operador) == True) and node.central_node != None and node.central_node.operator == "¬"):
+                    if ((isinstance(nodo.nodo_central, Operador) == True) and nodo.nodo_central != None and nodo.nodo_central.operador == "¬"):
             
-                        node = actual_node.right_node.right_node
+                        nodo = nodo_actual.nodo_derecho.nodo_derecho 
 
-                        if (node.central_node != None and isinstance(node.central_node, Proposicion) == True):
+                        if (nodo.nodo_central != None and isinstance(nodo.nodo_central, Proposicion) == True):
 
                             # we write ¬¬p = p
 
-                            actual_node = node.central_node
+                            nodo_actual = nodo.nodo_central
 
-                            actual_node.right_node = None 
+                            nodo_actual.nodo_derecho = None 
 
-                            actual_node.left_node = None
-                            node_null = True
+                            nodo_actual.nodo_izquierdo = None
+                            nodo_nulo = True
                         
                         else:
-                            node_null = True
+                            nodo_nulo = True
                     else:
-                        node_null = True
+                        nodo_nulo = True
                 else:
-                    node_null = True
+                    nodo_nulo = True
 
-        return actual_node # we return the tree
+        return nodo_actual # we return the tree
 
 
 
@@ -63,13 +63,13 @@ class TreeSimplification:
 
         # first simplification ¬ ¬ p == p
 
-        if (tree.right_node != None): # if the ones bellow this node are not null we call this function again(the simplify tree)
+        if (tree.nodo_derecha != None): # if the ones bellow this node are not null we call this function again(the simplify tree)
     
-            tree.right_node = self.simplificar(tree.right_node)
+            tree.nodo_derecha = self.simplificar(tree.nodo_derecha)
     
-        if (tree.left_node != None):
+        if (tree.nodo_izquierda != None):
             
-            tree.left_node = self.simplificar(tree.left_node)
+            tree.nodo_izquierda = self.simplificar(tree.nodo_izquierda)
 
         tree = self.simplificar_doble_negacion(tree) # here we recibe the first node 
 
@@ -77,4 +77,3 @@ class TreeSimplification:
     
     
         return tree # at the end we return the tree # once we are done with the recursive
-    

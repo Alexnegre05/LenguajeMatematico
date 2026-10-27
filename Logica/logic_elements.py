@@ -26,7 +26,7 @@ class Operador(Logica): # clase que define cada operador que necesitamos en la l
   def __init__(self, operador):
 
     if(operador == "^" or operador == "v" or operador == "¬" or operador == "-->" or operador == "<-->"):  # comprueba si el operador es válido
-      self.operator = operador
+      self.operador = operador
 
     else:
       raise Exception("Operator not valid")
@@ -36,7 +36,7 @@ class Parentesis(Logica): # clase que define los ()
   def __init__(self, parentesis):
     
     if (parentesis == "(" or parentesis == ")"):
-      self.delimeter = parentesis
+      self.parentesis = parentesis
     
     else:
       raise Exception("Wrong delimeters")
