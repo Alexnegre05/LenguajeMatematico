@@ -1,12 +1,12 @@
 # Documento donde ponemos las definiciones de los elementos que vamos a usar en la lógica
 
-class Logic(): # clase general que controla todo lo relacionado con la lógica
+class Logica(): # clase general que controla todo lo relacionado con la lógica
 
   pass
 
 
 
-class Proposition(Logic): # clase que contiene una proposición, puede ser falsa(0) o verdadera(1)
+class Proposicion(Logica): # clase que contiene una proposición, puede ser falsa(0) o verdadera(1)
 
   def __init__(self, value):
 
@@ -19,7 +19,7 @@ class Proposition(Logic): # clase que contiene una proposición, puede ser falsa
 
 
 
-class Operator(Logic): # clase que define cada operador que necesitamos en la lógica
+class Operador(Logica): # clase que define cada operador que necesitamos en la lógica
 
 # el ¬ se hace con alt gr +, la flecha añadiendo - + > (de mayor que)
 
@@ -31,7 +31,7 @@ class Operator(Logic): # clase que define cada operador que necesitamos en la l�
     else:
       raise Exception("Operator not valid")
 
-class Delimeter(Logic): # clase que define los () 
+class Parentesis(Logica): # clase que define los () 
 
   def __init__(self, delimeter):
     

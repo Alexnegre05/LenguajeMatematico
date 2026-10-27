@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from binary_operation import Logic, Proposition, Operator, Delimeter, Operation
+from binary_operation import Logic, Proposicion, Operador, Parentesis, Operation
 from my_ast import AST # importamos el AST
 
 from check_expressions import Check
@@ -14,7 +14,7 @@ class expression(Check): # clase que usamos para definir cuándo estamos trabaja
   def __init__(self, array):
 
 
-    if (array is not None and len(array) > 1 and isinstance(array[-1], Operator) == False): 
+    if (array is not None and len(array) > 1 and isinstance(array[-1], Operador) == False): 
       # queremos que el array tenga más de un argumento y que el último no sea un operador
       self.array = array
 
@@ -37,11 +37,11 @@ class expression(Check): # clase que usamos para definir cuándo estamos trabaja
 
       while (i < len(self.array)):
 
-        if ((isinstance(self.array[i], Operator) == True) and self.array[i].operator == operation):
+        if ((isinstance(self.array[i], Operador) == True) and self.array[i].operator == operation):
             result = Operation(self.array[i-1], self.array[i], self.array[i + 1])
 
             value = result.Result()
-            p = Proposition(value)
+            p = Proposicion(value)
 
             copy_array.pop() # restamos la última proposición ya que ahora forma parte de la operación que queremos resolver, usamos pop para ello
             copy_array.append(p)
@@ -88,7 +88,7 @@ class expression(Check): # clase que usamos para definir cuándo estamos trabaja
     result = operation.Result()
 
     # tenemos que poner el resultado dentro de una nueva proposición
-    p = Proposition(result)
+    p = Proposicion(result)
 
     return p # devolvemos la p
 

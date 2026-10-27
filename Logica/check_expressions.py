@@ -2,9 +2,9 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from binary_operation import Logic, Proposition, Operator, Delimeter, Operation
+from binary_operation import Logica, Proposicion, Operador, Parentesis, Operation
 
-class Check(Logic):
+class Check(Logica):
 
  
   def check_delimeters(self):
@@ -18,7 +18,7 @@ class Check(Logic):
        
         for i in range (0, len(self.array)):
           
-          if (isinstance(self.array[i], Delimeter) == True):  # comprobamos si el elemento es un delimitador
+          if (isinstance(self.array[i], Parentesis) == True):  # comprobamos si el elemento es un delimitador
     
             if (self.array[i].delimeter == ")"):
               
@@ -51,7 +51,7 @@ class Check(Logic):
 
 
     # aquí comprobamos si tenemos un último ) y un primer (, si no, devolvemos 0
-    if (len(self.array) < 2 or isinstance(self.array[0], Delimeter) == False or self.array[0].delimeter != "(" or isinstance(self.array[-1], Delimeter) == False or self.array[-1].delimeter != ")"):
+    if (len(self.array) < 2 or isinstance(self.array[0], Parentesis) == False or self.array[0].delimeter != "(" or isinstance(self.array[-1], Parentesis) == False or self.array[-1].delimeter != ")"):
       return 0
     
     count_delimiters = 1
@@ -62,7 +62,7 @@ class Check(Logic):
 
     for i in range(1, len(self.array) -1):
 
-      if (isinstance(self.array[i],Delimeter) == True):
+      if (isinstance(self.array[i],Parentesis) == True):
 
         if (self.array[i].delimeter == "("): # sumamos uno cuando encontramos ( y restamos uno para )
           count_delimiters = count_delimiters + 1
@@ -99,9 +99,9 @@ class Check(Logic):
           
 
       # hemos encontrado un delimitador doble que es )) 
-      if(isinstance(self.array[i], Delimeter) == True and self.array[i].delimeter == ")"):
+      if(isinstance(self.array[i], Parentesis) == True and self.array[i].delimeter == ")"):
         
-        if(isinstance(self.array[i + 1], Delimeter) == True and self.array[i+1].delimeter == ")"):
+        if(isinstance(self.array[i + 1], Parentesis) == True and self.array[i+1].delimeter == ")"):
 
           value_iterator = i
           break
@@ -117,11 +117,11 @@ class Check(Logic):
       
       for i in range(value_iterator,-1,-1):
 
-          if (isinstance(self.array[i], Delimeter) == True and self.array[i].delimeter == ")"):
+          if (isinstance(self.array[i], Parentesis) == True and self.array[i].delimeter == ")"):
            
             number_of_delimeters = number_of_delimeters + 1
          
-          elif (isinstance(self.array[i], Delimeter) == True and self.array[i].delimeter == "("):
+          elif (isinstance(self.array[i], Parentesis) == True and self.array[i].delimeter == "("):
             
             number_of_delimeters = number_of_delimeters -1  # restamos en este caso
 
@@ -132,7 +132,7 @@ class Check(Logic):
 
           if (number_of_delimeters == 0 and i > 0):
             
-            if(isinstance(self.array[i - 1], Delimeter) == True and i != value_iterator and self.array[i-1].delimeter == "("): 
+            if(isinstance(self.array[i - 1], Parentesis) == True and i != value_iterator and self.array[i-1].delimeter == "("): 
               # estamos comprobando que la i va hacia atrás, por lo que en lugar de i+1 es i - 1
               
                # eliminamos las posiciones donde había un () extra
@@ -178,7 +178,7 @@ class Check(Logic):
     while (i < length):
 
       # aquí comprobamos que el usuario haya puesto un operador, una proposición o un delimitador
-      if (isinstance(self.array[i], Proposition) == False and isinstance(self.array[i], Operator) == False and isinstance(self.array[i], Delimeter) == False):
+      if (isinstance(self.array[i], Proposicion) == False and isinstance(self.array[i], Operador) == False and isinstance(self.array[i], Parentesis) == False):
         
         raise Exception("the expression contains elements that are not or a proposition or an operator or a delimeter")
 
@@ -188,7 +188,7 @@ class Check(Logic):
       if (i == 0):
         
         # aquí comprobamos si el elemento es una proposición verificando lo opuesto
-        if (isinstance(self.array[i], Proposition) == False and isinstance(self.array[i], Delimeter) == False):
+        if (isinstance(self.array[i], Proposicion) == False and isinstance(self.array[i], Parentesis) == False):
           
           # aquí sabemos que esto es una operación, así que ahora comprobamos si el valor no es ¬
 
@@ -202,71 +202,71 @@ class Check(Logic):
         
         # CASO A: Si el último elemento es una Proposición, validamos el anterior (Tu lógica original)
 
-        if (isinstance(self.array[i], Proposition) == True):
-          if (isinstance(self.array[i-1], Operator) == False):
+        if (isinstance(self.array[i], Proposicion) == True):
+          if (isinstance(self.array[i-1], Operador) == False):
             return 0
 
         # CASO B: Si el último elemento es un Delimitador, nos aseguramos de que sea ")" y no "("
 
-        if (isinstance(self.array[i], Delimeter) == True):
+        if (isinstance(self.array[i], Parentesis) == True):
           
           if (self.array[i].delimeter == "("):
             return 0
 
         # CASO C: Si no es ni una Proposición ni un Delimitador (por ejemplo, termina en ^), es incorrecto
 
-        if (isinstance(self.array[i], Proposition) == False and isinstance(self.array[i], Delimeter) == False):
+        if (isinstance(self.array[i], Proposicion) == False and isinstance(self.array[i], Parentesis) == False):
           return 0
 
           
 
         
         # caso especial p ¬ q si y solo si i >= 2 porque si no i - 2 podría estar fuera de rango
-        if (i >= 2 and isinstance(self.array[i], Proposition) == True and isinstance(self.array[i-1], Operator) == True and self.array[i-1].operator == "¬" and isinstance(self.array[i-2], Proposition) == True):
+        if (i >= 2 and isinstance(self.array[i], Proposicion) == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operator == "¬" and isinstance(self.array[i-2], Proposicion) == True):
           return 0
 
       else: # el caso general
         
         # primero comprobamos que si tenemos una proposición, la anterior no sea una proposición
-        if (isinstance(self.array[i], Proposition) == True and isinstance(self.array[i-1], Proposition) == True):
+        if (isinstance(self.array[i], Proposicion) == True and isinstance(self.array[i-1], Proposicion) == True):
 
           return 0
 
         # hacemos lo mismo pero para los operadores, pero sin el ¬ no es la expresión que estamos viendo, ejemplo: esto es posible ^¬ porque luego va una p, pero esto no ¬^
 
-        if (isinstance(self.array[i], Operator) == True and isinstance(self.array[i-1], Operator) == True and self.array[i].operator != "¬"):
+        if (isinstance(self.array[i], Operador) == True and isinstance(self.array[i-1], Operador) == True and self.array[i].operator != "¬"):
 
           return 0
 
         # aquí comprobamos que no tengamos el caso de ¬ ¬
-        if (isinstance(self.array[i], Operator) == True and isinstance(self.array[i-1], Operator) == True and self.array[i].operator == "¬" and self.array[i-1].operator == "¬"):
+        if (isinstance(self.array[i], Operador) == True and isinstance(self.array[i-1], Operador) == True and self.array[i].operator == "¬" and self.array[i-1].operator == "¬"):
 
           return 0
 
         # aquí comprobamos que no tengamos el caso de p ¬ q y verificamos que i > 2
-        if (i >= 2 and isinstance(self.array[i], Proposition) == True and isinstance(self.array[i-1], Operator) == True and self.array[i-1].operator == "¬" and isinstance(self.array[i-2], Proposition) == True):
+        if (i >= 2 and isinstance(self.array[i], Proposicion) == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operator == "¬" and isinstance(self.array[i-2], Proposicion) == True):
           return 0
 
 
         # casos de delimitadores 
 
          # CASO 1: Evitar un operador binario justo después de un paréntesis de apertura ej: ( ^ p)
-        if (isinstance(self.array[i-1], Delimeter) == True and self.array[i-1].delimeter == "(" and isinstance(self.array[i], Operator) == True and self.array[i].operator != "¬"):
+        if (isinstance(self.array[i-1], Parentesis) == True and self.array[i-1].delimeter == "(" and isinstance(self.array[i], Operador) == True and self.array[i].operator != "¬"):
           
           return 0
 
         # CASO 2: Evitar un paréntesis de cierre justo después de un operador ej: (p ^ )
-        if (isinstance(self.array[i-1], Operator) == True and isinstance(self.array[i], Delimeter) == True and self.array[i].delimeter == ")"):
+        if (isinstance(self.array[i-1], Operador) == True and isinstance(self.array[i], Parentesis) == True and self.array[i].delimeter == ")"):
           
           return 0
 
         # CASO 3: Evitar un paréntesis de apertura justo después de una proposición sin un operador ej: p ( q )
-        if (isinstance(self.array[i-1], Proposition) == True and isinstance(self.array[i], Delimeter) == True and self.array[i].delimeter == "("):
+        if (isinstance(self.array[i-1], Proposicion) == True and isinstance(self.array[i], Parentesis) == True and self.array[i].delimeter == "("):
           
           return 0
 
         # CASO 4: Evitar una proposición justo después de un paréntesis de cierre sin un operador ej: ( p ) q
-        if (isinstance(self.array[i-1], Delimeter) == True and self.array[i-1].delimeter == ")" and isinstance(self.array[i], Proposition) == True):
+        if (isinstance(self.array[i-1], Parentesis) == True and self.array[i-1].delimeter == ")" and isinstance(self.array[i], Proposicion) == True):
           
           return 0
 

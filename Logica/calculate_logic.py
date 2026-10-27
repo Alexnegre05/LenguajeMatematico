@@ -3,20 +3,20 @@ import os # usamos esta libreria por tema de problemas de importaciones entre li
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from evaluate_expressions import Logic, Proposition, Operator, Operation, expression, Delimeter
+from evaluate_expressions import Logica, Proposicion, Operador, Operation, expression, Parentesis
 
 
 
 # proves
-logica = Logic()
+logica = Logica()
 
-proposicion = Proposition(1)
+proposicion = Proposicion(1)
 
-operador = Operator("^")
-operador2 = Operator("¬")
-proposicion2 = Proposition(0)
-delimeter1 = Delimeter("(")
-delimeter2 = Delimeter(")")
+operador = Operador("^")
+operador2 = Operador("¬")
+proposicion2 = Proposicion(0)
+delimeter1 = Parentesis("(")
+delimeter2 = Parentesis(")")
 
 expression = expression([ proposicion, operador,delimeter1, proposicion, operador, proposicion,operador,proposicion, delimeter2])
 

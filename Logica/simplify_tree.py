@@ -2,8 +2,8 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from logic_elements import Logic, Operator, Proposition, Delimeter
-from my_ast import AST
+from logic_elements import  Operador, Proposicion
+
 
 
 class TreeSimplification:
@@ -24,17 +24,17 @@ class TreeSimplification:
         
             else:
         
-                if ((isinstance(actual_node.central_node, Operator) == True) and actual_node.central_node.operator == "¬"): # if the node is an operation and its ¬
+                if ((isinstance(actual_node.central_node, Operador) == True) and actual_node.central_node.operator == "¬"): # if the node is an operation and its ¬
                 
                     # we check if its have sons, its and  and if the operator is ¬
                     
                     node = actual_node.right_node # we put this into node so tahat we don't have to worry aboiut to much node.node. ...
             
-                    if ((isinstance(node.central_node, Operator) == True) and node.central_node != None and node.central_node.operator == "¬"):
+                    if ((isinstance(node.central_node, Operador) == True) and node.central_node != None and node.central_node.operator == "¬"):
             
                         node = actual_node.right_node.right_node
 
-                        if (node.central_node != None and isinstance(node.central_node, Proposition) == True):
+                        if (node.central_node != None and isinstance(node.central_node, Proposicion) == True):
 
                             # we write ¬¬p = p
 
