@@ -401,7 +401,7 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
       simplificator = SimplificadorArbol()
       
-      tree = simplificator.simplificar(tree)
+      tree = simplificator.simplificar_general(tree)
 
       result = self.evaluar_nodo(tree)
 

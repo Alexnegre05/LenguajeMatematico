@@ -131,3 +131,26 @@ class AST():
         nuevo_nodo = AST(self.nodo_central, branca_derecha, branca_izquierda)
         
         return nuevo_nodo
+
+    
+
+    def contar_nodos_ast(self, nodo): # necesitamos una funcion que nos diga cuantos nodos hay, es muy util para saber si hay que simplificar o no
+
+        contar_nodos = 0
+
+        if (nodo != None): # si el central no es none
+            contar_nodos = contar_nodos + 1
+
+        else: # si el actual es None devolvemos el resultado 
+            return contar_nodos
+
+        if (nodo.nodo_derecha != None): # si el derecha no esta vacio
+            contar_nodos = contar_nodos + self.contar_nodos_ast(nodo.nodo_derecha) # llmamamos a contar nodos recursivamente
+
+        if (nodo.nodo_izquierda != None):
+            contar_nodos = contar_nodos + self.contar_nodos_ast(nodo.nodo_izquierda)
+
+        return contar_nodos # si el derecha o izquierda es None no van a hacer recursividad y tenemos que devolver el valor
+
+        
+
