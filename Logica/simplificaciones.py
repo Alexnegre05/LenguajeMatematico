@@ -8,35 +8,35 @@ class SimplificadorArbol:
         pass
 
     
-    def simplificar_doble_negacion(self, nodo_actual): # function that simplify the double negation
+    def simplificar_doble_negacion(self, nodo_actual): # funcion que simplifica la doble negacion
 
 
-        nodo_nulo = False # if we find that a node is null we stop searching 
+        nodo_nulo = False # si encontramos que un nodo es nulo dejamos de buscar 
 
         while (nodo_nulo == False):
         
-            if (nodo_actual == None or nodo_actual.nodo_central == None): # we exit the while
+            if (nodo_actual == None or nodo_actual.nodo_central == None): # salimos del while
         
                 nodo_nulo = True
         
             else:
         
-                if ((isinstance(nodo_actual.nodo_central, Operador) == True) and nodo_actual.nodo_central.operador == "¬"): # if the node is an operation and its ¬
+                if ((isinstance(nodo_actual.nodo_central, Operador) == True) and nodo_actual.nodo_central.operador == "¬"): # si el nodo es una operacion y es ¬
                 
-                    # we check if its have sons, its and  and if the operator is ¬
+                    # comprobamos si tiene hijos, y si el operador es ¬
                     
                     # Verificamos si en la izquierda se quedó atrapado el otro operador "¬"
                     nodo_izq = nodo_actual.nodo_izquierda
             
                     if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Operador) == True) and nodo_izq.nodo_central.operador == "¬"):
             
-                        # En la estructura plana sin paréntesis, la proposición real está a la derecha de la raíz
+                        # En la estructura plana sin paréntesis, la清 proposición real está a la derecha de la raíz
                         
                         nieto = nodo_actual.nodo_derecha 
 
                         if (nieto != None and nieto.nodo_central != None and isinstance(nieto.nodo_central, Proposicion) == True):
 
-                            # we write ¬¬p = p
+                            # escribimos ¬¬p = p
 
                             # Reemplazamos la raíz completa por el nodo de la proposición pura
                             nodo_actual = nieto 
@@ -75,7 +75,7 @@ class SimplificadorArbol:
                 else:
                     nodo_nulo = True
 
-        return nodo_actual # we return the tree
+        return nodo_actual # devolvemos el arbol
 
 
 
@@ -111,13 +111,13 @@ class SimplificadorArbol:
 
 
 
-    def simplificar(self, arbol): # function that simplifies the tree
-    # we are only going to program those functions that simplify the tree
+    def simplificar(self, arbol): # funcion que simplifica el arbol
+    # solo vamos a programar aquellas funciones que simplifican el arbol
 
         if (arbol == None):
             return None
 
-        # first simplification ¬ ¬ p == p
+        # primera simplificacion ¬ ¬ p == p
 
         if (hasattr(arbol, 'nodo_derecha') and arbol.nodo_derecha != None): 
         
@@ -128,9 +128,9 @@ class SimplificadorArbol:
             arbol.nodo_izquierda = self.simplificar(arbol.nodo_izquierda)
 
         
-        arbol = self.simplificar_doble_negacion(arbol) # here we recibe the first node 
+        arbol = self.simplificar_doble_negacion(arbol) # aqui recibimos el primer nodo 
 
             
            
         
-        return arbol # at the end we return the tree # once we are done with the recursive
+        return arbol # al final devolvemos el arbol # una vez que hemos terminado con la recursividad
