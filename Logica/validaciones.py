@@ -341,8 +341,6 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
 
 
-
-
   # función que evalúa un nodo del AST y calcula un valor
   def evaluar_nodo(self,node):
 
@@ -365,7 +363,17 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
     if (node.nodo_central.operador == "¬"):
 
       operation = Operacion(right, node.nodo_central, None)
+      
+      # Si hay un operador atrapado en la rama izquierda debido al slicing, lo ejecutamos sobre el resultado
+      if (left != None and hasattr(left, 'operador') == True and left.operador == "¬"):
+        
+        result_intermedio = operation.Resultado()
+        
+        p_intermedia = Proposicion(result_intermedio)
+        
+        operation = Operacion(p_intermedia, left, None)
     else:
+
       operation = Operacion(left, node.nodo_central, right)
 
     result = operation.Resultado()
@@ -374,6 +382,8 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
     p = Proposicion(result)
 
     return p # devolvemos la p
+
+
 
 
 
@@ -396,9 +406,9 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
       # comenzaremos evaluando solo la ¬ porque tiene más precedencia que las otras expresiones
 
-      simplificator = SimplificadorArbol()
+      # simplificator = SimplificadorArbol()
       
-      tree = simplificator.simplificar_general(tree)
+      # tree = simplificator.simplificar_general(tree)
 
       result = self.evaluar_nodo(tree)
 

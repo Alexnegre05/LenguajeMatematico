@@ -1,6 +1,7 @@
 # un AST es una clase que transforms la lista de operaciones en un árbol facilitando la evaluación de los elementos
 # debido a que el AST se utilizará en más de una carpeta, vamos a colocar este archivo fuera de todas las carpetas
 
+
 class AST():
 
     # precedence es un diccionario que contiene cómo funciona la operación (la precedencia)
@@ -41,14 +42,14 @@ class AST():
             
         posicion = 0 # usamos position para saber cuál fue la posición de menor precedencia; en caso de haber más de una, elegimos la de la derecha
 
-        self.nodo_central = None
+        nodo_central_detectado = None # ARREGLO CLAVE: Usamos una variable local en lugar de self.nodo_central para no destruir la raíz en la recursión
 
         posicion_lista = -1 # declaramos esta función que guarda cuál es la posición del array
         
         for i in range(len(self.precedencia)-1, -1,-1):
             
 
-            if (self.nodo_central == None): # esto sirve para hacer menos bucles
+            if (nodo_central_detectado == None): # esto sirve para hacer menos bucles
               
                 posicion = posicion + 1
                 
@@ -62,7 +63,7 @@ class AST():
                     if (hasattr(lista[j], tipo_parentesis) == True and getattr(lista[j], tipo_parentesis) == "("):
                        
                         profundidad_parentesis = profundidad_parentesis + 1
-                        continue # Pasamos al siguiente elemento porque un '(' no puede ser nodo operador central
+                        continue # Pasamos al Clinical elemento porque un '(' no puede ser nodo operador central
 
                    
                     # Si el elemento actual es un ')' reducimos el nivel DESPUÉS de evaluar
@@ -85,7 +86,7 @@ class AST():
                     if (hasattr(lista[j], tipo) == True and posicion == self.precedencia[getattr(lista[j], tipo)]):
                     
                     # también comprobamos si la precedencia es la misma
-                        self.nodo_central = lista[j] # colocamos esto como nodo central; nota que como este for terminará en el último elemento, el nodo central será el último elemento con menor precedencia
+                        nodo_central_detectado = lista[j] # colocamos esto como nodo central detectado localmente
                         posicion_lista = j # guardamos la posición donde hemos encontrado el último operador
 
 
@@ -128,7 +129,7 @@ class AST():
         branca_izquierda = self.crear_ast(lista_izquierda, tipo, tipo_parentesis)
         
         # usamos la derecha y la izquierda para crear el AST y devolverlo (recursividad)
-        nuevo_nodo = AST(self.nodo_central, branca_derecha, branca_izquierda)
+        nuevo_nodo = AST(nodo_central_detectado, branca_derecha, branca_izquierda) # Pasamos el operador detectado correctamente
         
         return nuevo_nodo
 

@@ -16,7 +16,7 @@ proposicion2 = Proposicion(0)
 delimeter1 = Parentesis("(")
 delimeter2 = Parentesis(")")
 
-expresion = expresion([ operador2,operador2, proposicion])
+expresion = expresion([ proposicion, operador,delimeter1, proposicion, operador, proposicion,operador,proposicion, delimeter2])
 
 
 

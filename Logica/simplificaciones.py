@@ -7,6 +7,7 @@ class SimplificadorArbol:
     def __init__(self):
         pass
 
+    
     def simplificar_doble_negacion(self, nodo_actual): # function that simplify the double negation
 
 
@@ -28,13 +29,17 @@ class SimplificadorArbol:
             
                     if (nodo != None and (isinstance(nodo.nodo_central, Operador) == True) and nodo.nodo_central.operador == "¬"):
             
-                        nodo = nodo_actual.nodo_derecha.nodo_derecha
+                        # ARREGLO 1: Cambiamos 'nodo_actual.nodo_derecha.nodo_derecha' por 'nodo.nodo_derecha'
+                        # Como ya guardaste 'nodo_actual.nodo_derecha' en la variable 'nodo', el nieto está en 'nodo.nodo_derecha'
+                        nieto = nodo.nodo_derecha 
 
-                        if (nodo != None and nodo.nodo_central != None and isinstance(nodo.nodo_central, Proposicion) == True):
+                        if (nieto != None and nieto.nodo_central != None and isinstance(nieto.nodo_central, Proposicion) == True):
 
                             # we write ¬¬p = p
 
-                            nodo_actual = nodo.nodo_central
+                            # ARREGLO 2: Cambiamos 'nodo_actual = nodo.nodo_central' por 'nodo_actual = nieto'
+                            # Debes devolver el objeto AST completo (nieto) para que la estructura del árbol no se rompa
+                            nodo_actual = nieto 
 
                             nodo_actual.nodo_derecha = None 
 
@@ -49,6 +54,7 @@ class SimplificadorArbol:
                     nodo_nulo = True
 
         return nodo_actual # we return the tree
+
 
 
 
