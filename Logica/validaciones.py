@@ -15,33 +15,29 @@ class Check(Logica):
  
   def check_parentesis(self):
 
-    
-    
-
-        contador_parentesis_izquierda = 0
-       
-        contador_parentesis_derecha = 0
+        balance_parentesis = 0
        
         for i in range (0, len(self.array)):
           
           if (isinstance(self.array[i], Parentesis) == True):  # comprobamos si el elemento es un delimitador
     
-            if (self.array[i].parentesis == ")"):
+            if (self.array[i].parentesis == "("):
               
-              contador_parentesis_derecha = contador_parentesis_derecha + 1
+              balance_parentesis = balance_parentesis + 1
             else:
              
-              contador_parentesis_izquierda = contador_parentesis_izquierda + 1
+              balance_parentesis = balance_parentesis - 1
 
-            if (contador_parentesis_derecha > contador_parentesis_izquierda): 
+            if (balance_parentesis < 0): 
             
-              raise Exception("the delimiters right and left are not equal")
+              raise Exception("los parentesis izquierda y derecha no son iguales")
 
         # comprobamos que los delimitadores tengan el mismo número de ( que de ) al final de el for
 
-        if contador_parentesis_izquierda != contador_parentesis_derecha: 
+        if (balance_parentesis != 0): 
 
-          raise Exception("the delimiters right and left are not equal")
+          raise Exception("los parentesis izquierda y derecha no son iguales")
+
     
 
 

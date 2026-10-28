@@ -60,6 +60,7 @@ class Operacion(Logica): # clase que toma dos proposiciones y una operación y d
   def Resultado(self):
 
       Porposicion1 = self.proposicion1.value
+
       Operador = self.operador.operador
 
       # Cambiado a "is None" para solucionar AttributeError
@@ -69,20 +70,16 @@ class Operacion(Logica): # clase que toma dos proposiciones y una operación y d
       else:
         Proposicion2 = self.proposicion2.value
 
-      if (Operador == "^"): # comprobamos uno por uno qué operador estamos usando
+      if (Operador == "^"): # comprobamos uno por uno qué operador estamos usando, 
+        # como sabemos que solo es 1 en un valor en concreto de la tabla de verdad y 0 en los demas podemos devolver 0, 
+        # hacemos cosas similares para los otros operadores
 
         # vamos caso por caso
-        if (Porposicion1 == 0 and Proposicion2 == 0):
-          return 0
-
-        elif (Porposicion1 == 1 and Proposicion2 == 0):
-          return 0
-
-        elif (Porposicion1 == 0 and Proposicion2 == 1):
-          return 0
-
-        elif (Porposicion1 == 1 and Proposicion2 == 1):
+        if (Porposicion1 == 1 and Proposicion2 == 1):
           return 1
+
+        else:
+          return 0
 
       # hacemos lo mismo para los otros operadores
       elif (Operador == "v"):
@@ -91,50 +88,33 @@ class Operacion(Logica): # clase que toma dos proposiciones y una operación y d
         if (Porposicion1 == 0 and Proposicion2 == 0):
           return 0
 
-        elif (Porposicion1 == 1 and Proposicion2 == 0):
-          return 1
-
-        elif (Porposicion1 == 0 and Proposicion2 == 1):
-          return 1
-
-        elif (Porposicion1 == 1 and Proposicion2 == 1):
+        else:
           return 1
 
       elif (Operador == "-->"):
 
 
-        if (Porposicion1 == 0 and Proposicion2 == 0):
-          return 1
-
-        elif (Porposicion1 == 1 and Proposicion2 == 0):
+        if (Porposicion1 == 1 and Proposicion2 == 0):
           return 0
 
-        elif (Porposicion1 == 0 and Proposicion2 == 1):
-          return 1
-
-        elif (Porposicion1 == 1 and Proposicion2 == 1):
+        else:
           return 1
 
 
       elif (Operador == "<-->"):
 
 
-        if (Porposicion1 == 0 and Proposicion2 == 0):
+        if (Porposicion1 == Proposicion2): # si ambos valen o 1 o 0
           return 1
 
-        elif (Porposicion1 == 1 and Proposicion2 == 0):
+        else:
           return 0
 
-        elif (Porposicion1 == 0 and Proposicion2 == 1):
-          return 0
-
-        elif (Porposicion1 == 1 and Proposicion2 == 1):
-          return 1
-
-      elif (Operador == "¬"): # caso especial, la negación
+      elif (Operador == "¬"): # caso especial, la negación ya que solo tiene una proposicion 
 
         if (Porposicion1 == 0):
           return 1
         
         else:
           return 0
+
