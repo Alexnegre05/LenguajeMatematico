@@ -53,7 +53,7 @@ class Check(Logica):
 
 
     # aquí comprobamos si tenemos un último ) y un primer (, si no, devolvemos 0
-    if (len(self.array) < 2 or isinstance(self.array[0], Parentesis) == False or self.array[0].parentesis != "(" or isinstance(self.array[-1], Parentesis) == False or self.array[-1].delimiter != ")"):
+    if (len(self.array) < 2 or isinstance(self.array[0], Parentesis) == False or self.array[0].parentesis != "(" or isinstance(self.array[-1], Parentesis) == False or self.array[-1].parentesis != ")"):
       return 0
     
     contador_parentesis = 1
