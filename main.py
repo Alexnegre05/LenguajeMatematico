@@ -1,7 +1,4 @@
-import sys
-import os # usamos esta libreria por tema de problemas de importaciones entre librerias
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from Logica.modelos import Logica, Proposicion, Operador, Parentesis
 from Logica.validaciones import expresion

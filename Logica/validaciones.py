@@ -1,6 +1,4 @@
-import sys
-import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 
 from Logica.operaciones import  Proposicion, Operador, Operacion
 from mi_ast import AST # importamos el AST
@@ -10,7 +8,7 @@ from Logica.simplificaciones import SimplificadorArbol
 
 
 
-from Logica.operaciones import Logica, Proposicion, Operador, Parentesis, Operacion
+from Logica.operaciones import Proposicion, Operador, Parentesis, Operacion
 
 class Check(Logica):
 
