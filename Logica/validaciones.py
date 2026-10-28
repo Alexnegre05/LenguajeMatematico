@@ -406,9 +406,9 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
       # comenzaremos evaluando solo la ¬ porque tiene más precedencia que las otras expresiones
 
-      # simplificator = SimplificadorArbol()
+      simplificator = SimplificadorArbol()
       
-      # tree = simplificator.simplificar_general(tree)
+      tree = simplificator.simplificar_general(tree)
 
       result = self.evaluar_nodo(tree)
 

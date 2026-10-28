@@ -25,35 +25,58 @@ class SimplificadorArbol:
                 
                     # we check if its have sons, its and  and if the operator is ¬
                     
-                    nodo = nodo_actual.nodo_derecha # we put this into node so tahat we don't have to worry aboiut to much node.node. ...
+                    # Verificamos si en la izquierda se quedó atrapado el otro operador "¬"
+                    nodo_izq = nodo_actual.nodo_izquierda
             
-                    if (nodo != None and (isinstance(nodo.nodo_central, Operador) == True) and nodo.nodo_central.operador == "¬"):
+                    if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Operador) == True) and nodo_izq.nodo_central.operador == "¬"):
             
-                        # ARREGLO 1: Cambiamos 'nodo_actual.nodo_derecha.nodo_derecha' por 'nodo.nodo_derecha'
-                        # Como ya guardaste 'nodo_actual.nodo_derecha' en la variable 'nodo', el nieto está en 'nodo.nodo_derecha'
-                        nieto = nodo.nodo_derecha 
+                        # En la estructura plana sin paréntesis, la proposición real está a la derecha de la raíz
+                        
+                        nieto = nodo_actual.nodo_derecha 
 
                         if (nieto != None and nieto.nodo_central != None and isinstance(nieto.nodo_central, Proposicion) == True):
 
                             # we write ¬¬p = p
 
-                            # ARREGLO 2: Cambiamos 'nodo_actual = nodo.nodo_central' por 'nodo_actual = nieto'
-                            # Debes devolver el objeto AST completo (nieto) para que la estructura del árbol no se rompa
+                            # Reemplazamos la raíz completa por el nodo de la proposición pura
                             nodo_actual = nieto 
 
                             nodo_actual.nodo_derecha = None 
 
                             nodo_actual.nodo_izquierda = None
+                           
                             nodo_nulo = True
                         
                         else:
                             nodo_nulo = True
                     else:
-                        nodo_nulo = True
+                        # Si no estaba a la izquierda, aplicamos el caso estándar para cuando viene con paréntesis
+                        nodo_der = nodo_actual.nodo_derecha
+                        
+                        if (nodo_der != None and (isinstance(nodo_der.nodo_central, Operador) == True) and nodo_der.nodo_central.operador == "¬"):
+                           
+                            
+                            nieto = nodo_der.nodo_derecha
+                            
+                            if (nieto != None and nieto.nodo_central != None and isinstance(nieto.nodo_central, Proposicion) == True):
+                                nodo_actual = nieto
+                                
+                                nodo_actual.nodo_derecha = None
+                                
+                                nodo_actual.nodo_izquierda = None
+                                
+                                nodo_nulo = True
+                            
+                            else:
+                                nodo_nulo = True
+                                
+                        else:
+                            nodo_nulo = True
                 else:
                     nodo_nulo = True
 
         return nodo_actual # we return the tree
+
 
 
 
@@ -81,6 +104,7 @@ class SimplificadorArbol:
 
             print("nodos al inicio: ", numero_nodos)
             print("nodos al simplificar", numero_actual_nodos)
+            
         return arbol # devolvemos el arbol simplificado
 
 
@@ -95,13 +119,13 @@ class SimplificadorArbol:
 
         # first simplification ¬ ¬ p == p
 
-        if (hasattr(arbol, 'nodo_derecho') and arbol.nodo_derecho != None): # if the ones bellow this node are not null we call this function again(the simplify tree)
+        if (hasattr(arbol, 'nodo_derecha') and arbol.nodo_derecha != None): 
         
-            arbol.nodo_derecho = self.simplificar(arbol.nodo_derecho)
+            arbol.nodo_derecha = self.simplificar(arbol.nodo_derecha)
         
-        if (hasattr(arbol, 'nodo_izquierdo') and arbol.nodo_izquierdo != None):
+        if (hasattr(arbol, 'nodo_izquierda') and arbol.nodo_izquierda != None): 
                 
-            arbol.nodo_izquierdo = self.simplificar(arbol.nodo_izquierdo)
+            arbol.nodo_izquierda = self.simplificar(arbol.nodo_izquierda)
 
         
         arbol = self.simplificar_doble_negacion(arbol) # here we recibe the first node 
