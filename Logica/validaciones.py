@@ -245,10 +245,7 @@ class Check(Logica):
 
           return 0
 
-        # aquí comprobamos que no tengamos el caso de ¬ ¬
-        if (isinstance(self.array[i], Operador) == True and isinstance(self.array[i-1], Operador) == True and self.array[i].operador == "¬" and self.array[i-1].operador == "¬"):
-
-          return 0
+       
 
         # aquí comprobamos que no tengamos el caso de p ¬ q y verificamos que i > 2
         if (i >= 2 and isinstance(self.array[i], Proposicion) == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operador == "¬" and isinstance(self.array[i-2], Proposicion) == True):

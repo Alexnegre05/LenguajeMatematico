@@ -24,11 +24,11 @@ class SimplificadorArbol:
                 
                     # we check if its have sons, its and  and if the operator is ¬
                     
-                    nodo = nodo_actual.nodo_derecho # we put this into node so tahat we don't have to worry aboiut to much node.node. ...
+                    nodo = nodo_actual.nodo_derecha # we put this into node so tahat we don't have to worry aboiut to much node.node. ...
             
                     if (nodo != None and (isinstance(nodo.nodo_central, Operador) == True) and nodo.nodo_central.operador == "¬"):
             
-                        nodo = nodo_actual.nodo_derecho.nodo_derecho 
+                        nodo = nodo_actual.nodo_derecha.nodo_derecha
 
                         if (nodo != None and nodo.nodo_central != None and isinstance(nodo.nodo_central, Proposicion) == True):
 
@@ -36,9 +36,9 @@ class SimplificadorArbol:
 
                             nodo_actual = nodo.nodo_central
 
-                            nodo_actual.nodo_derecho = None 
+                            nodo_actual.nodo_derecha = None 
 
-                            nodo_actual.nodo_izquierdo = None
+                            nodo_actual.nodo_izquierda = None
                             nodo_nulo = True
                         
                         else:
@@ -73,6 +73,8 @@ class SimplificadorArbol:
             else:
                 numero_actual_nodos = numero_nodos # si el arbol es none por algun error ponemos que los nodos sean iguales para salir de el bucle
 
+            print("nodos al inicio: ", numero_nodos)
+            print("nodos al simplificar", numero_actual_nodos)
         return arbol # devolvemos el arbol simplificado
 
 
