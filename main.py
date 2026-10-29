@@ -1,24 +1,23 @@
-
-
 from Logica.modelos import Logica, Proposicion, Operador, Parentesis
 from Logica.validaciones import expresion
 
-
-
-# proves
+# pruebas
 logica = Logica()
 
-proposicion = Proposicion(1)
-
-operador = Operador("^")
+proposicion = Proposicion(1)      # p
+operador = Operador("^")          # ^
 operador2 = Operador("¬")
-proposicion2 = Proposicion(0)
+proposicion2 = Proposicion(0)     # 0
 delimeter1 = Parentesis("(")
 delimeter2 = Parentesis(")")
 
-expresion = expresion([delimeter1, proposicion, operador,delimeter1, operador2,  proposicion, operador, proposicion,operador,proposicion, delimeter2, delimeter2])
+# EXPRESIÓN ADAPTADA: p ^ 0
+expresion_p_0 = expresion([
+    proposicion, 
+    operador, 
+    proposicion
+])
 
-
-
-value = expresion.evaluar()
-print(value)
+# Evaluamos la expresión
+value = expresion_p_0.evaluar()
+print(value)  # Debería dar 0 tras pasar por tu SimplificadorArbol
