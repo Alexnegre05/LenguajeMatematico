@@ -142,7 +142,7 @@ class SimplificadorArbol:
                             nodo_actual.nodo_izquierda = None
                             nodo_actual.nodo_derecha = None
     
-                    # caso 0 y p, la inversa
+                    # caso 1 y p, la inversa
                         
                     elif (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
     
@@ -380,6 +380,54 @@ class SimplificadorArbol:
         return nodo_actual
 
 
+    # ley que simplifica el cao 0 --> p = 0
+    def simplificar_cond0(self, nodo_actual):
+
+            if (nodo_actual == None or nodo_actual.nodo_central == None):
+
+                return nodo_actual
+
+            else:
+                if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "-->"): # si es -->
+
+                    nodo_izq = nodo_actual.nodo_izquierda
+
+                    nodo_der = nodo_actual.nodo_derecha
+
+                    if (nodo_izq != None and isinstance(nodo_izq.nodo_central, Proposicion) == True and nodo_izq.nodo_central.value == 0):
+
+                        nodo_actual.nodo_central = Proposicion(1)
+                        nodo_actual.nodo_izquierda = None
+                        nodo_actual.nodo_derecha = None
+
+            return nodo_actual
+
+
+
+
+
+
+    def simplificar_cond1(self, nodo_actual):
+
+        if (nodo_actual == None or nodo_actual.nodo_central == None):
+
+            return nodo_actual
+
+        else:
+            if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "-->"): # si es -->
+
+                nodo_izq = nodo_actual.nodo_izquierda
+
+                nodo_der = nodo_actual.nodo_derecha
+
+                if (nodo_der != None and isinstance(nodo_der.nodo_central, Proposicion) == True and nodo_der.nodo_central.value == 1):
+
+                    nodo_actual.nodo_central = Proposicion(1)
+                    nodo_actual.nodo_izquierda = None
+                    nodo_actual.nodo_derecha = None
+
+        return nodo_actual
+
 
 
 
@@ -411,8 +459,6 @@ class SimplificadorArbol:
             else:
                 numero_actual_nodos = numero_nodos # si el arbol es none por algun error ponemos que los nodos sean iguales para salir de el bucle
 
-            print("nodos al inicio: ", numero_nodos)
-            print("nodos al simplificar", numero_actual_nodos)
             
         return arbol # devolvemos el arbol simplificado
 
@@ -459,5 +505,8 @@ class SimplificadorArbol:
         arbol = self.simplificar_pop(arbol)
         
         arbol = self.simplificar_ponop(arbol)
-        
+
+        arbol = self.simplificar_cond0(arbol)
+
+        arbol = self.simplificar_cond1(arbol)
         return arbol # al final devolvemos el arbol # una vez que hemos terminado con la recursividad
