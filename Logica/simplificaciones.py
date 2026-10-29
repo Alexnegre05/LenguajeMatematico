@@ -234,6 +234,153 @@ class SimplificadorArbol:
         return nodo_actual
 
 
+    
+
+
+    def simplificar_po0(self, nodo_actual):
+
+            if (nodo_actual == None or nodo_actual.nodo_central == None):
+
+                return nodo_actual
+
+            else:
+                if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "v"): # si es v
+
+                    nodo_izq = nodo_actual.nodo_izquierda
+
+                    nodo_der = nodo_actual.nodo_derecha
+
+                    if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
+
+                        if (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True) and nodo_der.nodo_central.value == 0): # si el valor es 0
+
+                            nodo_actual.nodo_central = nodo_izq.nodo_central
+                            nodo_actual.nodo_izquierda = None
+                            nodo_actual.nodo_derecha = None
+
+                    # caso 0 y p, la inversa
+
+                    elif (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
+
+                        if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True) and nodo_izq.nodo_central.value == 0): # si el valor es 0
+
+                            nodo_actual.nodo_central = nodo_der.nodo_central
+                            nodo_actual.nodo_izquierda = None
+                            nodo_actual.nodo_derecha = None
+
+            return nodo_actual
+
+
+
+
+
+
+    def simplificar_po1(self, nodo_actual): # lo msimo pero ahora devolvemos 1
+
+            if (nodo_actual == None or nodo_actual.nodo_central == None):
+
+                return nodo_actual
+
+            else:
+                if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "v"): # si es v
+
+                    nodo_izq = nodo_actual.nodo_izquierda
+
+                    nodo_der = nodo_actual.nodo_derecha
+
+                    if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
+
+                        if (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True) and nodo_der.nodo_central.value == 1): # si el valor es 1
+
+                            nodo_actual.nodo_central = nodo_der.nodo_central
+                            nodo_actual.nodo_izquierda = None
+                            nodo_actual.nodo_derecha = None
+
+                    # caso 1 y p, la inversa
+
+                    elif (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
+
+                        if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True) and nodo_izq.nodo_central.value == 1):
+
+                            nodo_actual.nodo_central = nodo_izq.nodo_central
+                            nodo_actual.nodo_izquierda = None
+                            nodo_actual.nodo_derecha = None
+
+            return nodo_actual
+
+
+
+    def simplificar_pop(self, nodo_actual):
+
+        if (nodo_actual == None or nodo_actual.nodo_central == None):
+
+                return nodo_actual
+
+        else:
+
+            if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "v"): # si es v
+
+                nodo_izq = nodo_actual.nodo_izquierda
+
+                nodo_der = nodo_actual.nodo_derecha
+
+                if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
+
+                    if (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True) and nodo_der.nodo_central.value == nodo_izq.nodo_central.value): # si el valor es 1
+
+                        nodo_actual.nodo_central = nodo_der.nodo_central
+                        nodo_actual.nodo_izquierda = None
+                        nodo_actual.nodo_derecha = None
+
+        return nodo_actual
+
+
+
+    def simplificar_ponop(self, nodo_actual):
+
+        if (nodo_actual == None or nodo_actual.nodo_central == None):
+
+            return nodo_actual
+
+        else:
+            if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "v"): # si es v
+
+                nodo_izq = nodo_actual.nodo_izquierda
+
+                nodo_der = nodo_actual.nodo_derecha
+
+                # caso p v ¬p
+
+                if (nodo_izq != None and isinstance(nodo_izq.nodo_central, Proposicion) == True):
+
+                    if (nodo_der != None and isinstance(nodo_der.nodo_central, Operador) == True and nodo_der.nodo_central.operador == "¬"):
+
+                        nuevo_nodo = nodo_der
+
+                        if (nuevo_nodo.nodo_derecha != None and isinstance(nuevo_nodo.nodo_derecha.nodo_central, Proposicion) == True and nuevo_nodo.nodo_derecha.nodo_central.value == nodo_izq.nodo_central.value):
+
+                            nodo_actual.nodo_central = Proposicion(1)
+                            nodo_actual.nodo_derecha = None
+                            nodo_actual.nodo_izquierda = None
+
+                # caso ¬p v p
+
+                elif (nodo_izq != None and isinstance(nodo_izq.nodo_central, Operador) == True and nodo_izq.nodo_central.operador == "¬"):
+
+                    if (nodo_der != None and isinstance(nodo_der.nodo_central, Proposicion) == True):
+
+                        nuevo_nodo = nodo_izq
+
+                        if (nuevo_nodo.nodo_derecha != None and isinstance(nuevo_nodo.nodo_derecha.nodo_central, Proposicion) == True and nuevo_nodo.nodo_derecha.nodo_central.value == nodo_der.nodo_central.value):
+
+                            nodo_actual.nodo_central = Proposicion(1)
+                            nodo_actual.nodo_derecha = None
+                            nodo_actual.nodo_izquierda = None
+
+        return nodo_actual
+
+
+
 
 
 
@@ -304,5 +451,13 @@ class SimplificadorArbol:
         arbol = self.simplificar_pyp(arbol)
 
         arbol = self.simplificar_pynop(arbol)
+
+        arbol = self.simplificar_po0(arbol)
+
+        arbol = self.simplificar_po1(arbol)
+        
+        arbol = self.simplificar_pop(arbol)
+        
+        arbol = self.simplificar_ponop(arbol)
         
         return arbol # al final devolvemos el arbol # una vez que hemos terminado con la recursividad
