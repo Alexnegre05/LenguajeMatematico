@@ -9,13 +9,17 @@ class Operacion(Logica): # clase que toma dos proposiciones y una operación y d
   def __init__(self, Proposicion1, operador, Proposicion2):
 
     instance_proposicion1 = isinstance(Proposicion1,Proposicion)
+
     instance_proposicion2 = isinstance(Proposicion2,Proposicion) # hacemos esto para no calcular tantas veces el isinstance
+
     instance_operador =  isinstance(operador, Operador) == True
 
     if (instance_proposicion1 == True and instance_operador == True and instance_proposicion2 == True): # usamos isinstance para saber si pertenece a una clase concreta
 
         self.proposicion1 = Proposicion1
+
         self.operador = operador
+
         self.proposicion2 = Proposicion2
 
     else:
@@ -23,7 +27,9 @@ class Operacion(Logica): # clase que toma dos proposiciones y una operación y d
       if (instance_proposicion1 == True and instance_operador == True and operador.operador == "¬"): # caso exclusivo para la negación
 
         self.proposicion1 = Proposicion1
+
         self.operador = operador
+
         self.proposicion2 = None # ponemos la proposición 2 como None para saber que está vacía
 
 
@@ -64,7 +70,9 @@ class Operacion(Logica): # clase que toma dos proposiciones y una operación y d
       Operador = self.operador.operador
 
       # Cambiado a "is None" para solucionar AttributeError
+
       if (Operador == "¬" and self.proposicion2 is None):
+
         Proposicion2 = None
 
       else:
@@ -76,6 +84,7 @@ class Operacion(Logica): # clase que toma dos proposiciones y una operación y d
 
         # vamos caso por caso
         if (Porposicion1 == 1 and Proposicion2 == 1):
+          
           return 1
 
         else:

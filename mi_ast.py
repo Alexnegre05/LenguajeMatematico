@@ -46,48 +46,50 @@ class AST():
 
         posicion_lista = -1 # declaramos esta función que guarda cuál es la posición del array
         
-        for i in range(len(self.precedencia)-1, -1,-1):
-            
+        #  Buscamos la menor precedencia usando el concepto de supremo, inf es siempre mayor a cualquier numero, sera siempre la precedencia para comparar---
+        menor_precedencia_encontrada = float('inf')
 
-            if (nodo_central_detectado == None): # esto sirve para hacer menos bucles
-              
-                posicion = posicion + 1
-                
-                # Llevamos el conteo del nivel de delimitadores en una sola pasada hacia adelante
+        # Llevamos el conteo del nivel de delimitadores en una sola pasada hacia atrás para romper empates a la derecha
+        profundidad_parentesis = 0 
+        
+        for j in range(len(lista) - 1, -1, -1):
+
+            # Si el elemento actual es un ')' aumentamos el nivel ANTES de evaluar (yendo hacia atrás)
+            if (hasattr(lista[j], tipo_parentesis) == True and getattr(lista[j], tipo_parentesis) == ")"):
                
-                profundidad_parentesis = 0 
-                
-                for j in range(0, len(lista)):
+                profundidad_parentesis = profundidad_parentesis + 1
+                continue # Pasamos al siguiente elemento
 
-                    # Si el elemento actual es un '(' aumentamos el nivel ANTES de evaluar
-                    if (hasattr(lista[j], tipo_parentesis) == True and getattr(lista[j], tipo_parentesis) == "("):
-                       
-                        profundidad_parentesis = profundidad_parentesis + 1
-                        continue # Pasamos al Clinical elemento porque un '(' no puede ser nodo operador central
+           
+            # Si el elemento actual es un '(' reducimos el nivel DESPUÉS de evaluar (yendo hacia atrás)
+            if (hasattr(lista[j], tipo_parentesis) == True and getattr(lista[j], tipo_parentesis) == "("):
+               
+                profundidad_parentesis = profundidad_parentesis - 1
+                continue # Pasamos al siguiente elemento
 
-                   
-                    # Si el elemento actual es un ')' reducimos el nivel DESPUÉS de evaluar
-                    if (hasattr(lista[j], tipo_parentesis) == True and getattr(lista[j], tipo_parentesis) == ")"):
-                       
-                        profundidad_parentesis = profundidad_parentesis - 1
-                        continue # Pasamos al siguiente elemento
+            # si el elemento que estamos buscando está dentro de un delimitador, pasamos de largo
+            
+            if (profundidad_parentesis > 0):
+                continue
 
-                    # si el elemento que estamos buscando está dentro de un delimitador, pasamos de largo
-                    
-                    if (profundidad_parentesis > 0):
-                        continue
+            # dado que no podemos usar isinstance, usamos hasattr para verificar si tiene un atributo
+            # es hasattr(objeto, "nombre del atributo"), ejemplo hasattr(array[i], operador) para self.operator...
+            # ponemos esto de forma general trabajando con type
 
-                    # dado que no podemos usar isinstance, usamos hasattr para verificar si tiene un atributo
-                    # es hasattr(objeto, "nombre del atributo"), ejemplo hasattr(array[i], operador) para self.operator...
-                    # ponemos esto de forma general trabajando con type
+            # getattr te devuelve el atributo
+            
+            if (hasattr(lista[j], tipo) == True):
 
-                    # getattr te devuelve el atributo
-                    
-                    if (hasattr(lista[j], tipo) == True and posicion == self.precedencia[getattr(lista[j], tipo)]):
-                    
-                    # también comprobamos si la precedencia es la misma
-                        nodo_central_detectado = lista[j] # colocamos esto como nodo central detectado localmente
-                        posicion_lista = j # guardamos la posición donde hemos encontrado el último operador
+                precedencia_actual = self.precedencia[getattr(lista[j], tipo)]
+            
+                # Comprobamos si la precedencia actual es menor que nuestra cota superior (supremo)
+                if (precedencia_actual < menor_precedencia_encontrada):
+
+                    menor_precedencia_encontrada = precedencia_actual
+
+                    nodo_central_detectado = lista[j] # colocamos esto como nodo central detectado localmente
+
+                    posicion_lista = j # guardamos la posición donde hemos encontrado el último operador
 
 
         # fuera del for
@@ -152,6 +154,3 @@ class AST():
             contar_nodos = contar_nodos + self.contar_nodos_ast(nodo.nodo_izquierda)
 
         return contar_nodos # si el derecha o izquierda es None no van a hacer recursividad y tenemos que devolver el valor
-
-        
-
