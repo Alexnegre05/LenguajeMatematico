@@ -329,35 +329,8 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
 
 
-  def operacion_binaria(self, operation): # recibe la cadena y la operación que quieres resolver y devuelve una respuesta
-
-      copy_array = []
-      i = 0
-
-      while (i < len(self.array)):
-
-        if ((isinstance(self.array[i], Operador) == True) and self.array[i].operador == operation):
-            result = Operacion(self.array[i-1], self.array[i], self.array[i + 1])
-
-            value = result.Resultado()
-            p = Proposicion(value)
-
-            copy_array.pop() # restamos la última proposición ya que ahora forma parte de la operación que queremos resolver, usamos pop para ello
-            copy_array.append(p)
-
-            i = i + 2
-
-        else:
-          copy_array.append(self.array[i])
-          i = i + 1
-
-      self.array = copy_array
-
-      return self.array
-
-
-
   # función que evalúa un nodo del AST y calcula un valor
+  
   def evaluar_nodo(self,node):
 
     if (node == None): # si es nulo devolvemos nulo
