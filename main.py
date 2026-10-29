@@ -13,8 +13,9 @@ delimeter2 = Parentesis(")")
 
 # EXPRESIÓN ADAPTADA: p ^ 0
 expresion_p_0 = expresion([
+    operador2,
     proposicion, 
-    operador, 
+    operador,
     proposicion
 ])
 

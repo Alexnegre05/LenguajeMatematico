@@ -187,6 +187,61 @@ class SimplificadorArbol:
 
 
 
+    
+
+
+    def simplificar_pynop(self, nodo_actual):
+
+        if (nodo_actual == None or nodo_actual.nodo_central == None):
+
+            return nodo_actual
+
+        else:
+            if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "^"): # si es ^
+
+                nodo_izq = nodo_actual.nodo_izquierda
+
+                nodo_der = nodo_actual.nodo_derecha
+
+                # caso p ^ ¬p
+
+                if (nodo_izq != None and isinstance(nodo_izq.nodo_central, Proposicion) == True):
+
+                    if (nodo_der != None and isinstance(nodo_der.nodo_central, Operador) == True and nodo_der.nodo_central.operador == "¬"):
+
+                        nuevo_nodo = nodo_der
+
+                        if (nuevo_nodo.nodo_derecha != None and isinstance(nuevo_nodo.nodo_derecha.nodo_central, Proposicion) == True and nuevo_nodo.nodo_derecha.nodo_central.value == nodo_izq.nodo_central.value):
+
+                            nodo_actual.nodo_central = Proposicion(0)
+                            nodo_actual.nodo_derecha = None
+                            nodo_actual.nodo_izquierda = None
+
+                # caso ¬p ^ p
+
+                elif (nodo_izq != None and isinstance(nodo_izq.nodo_central, Operador) == True and nodo_izq.nodo_central.operador == "¬"):
+
+                    if (nodo_der != None and isinstance(nodo_der.nodo_central, Proposicion) == True):
+
+                        nuevo_nodo = nodo_izq
+
+                        if (nuevo_nodo.nodo_derecha != None and isinstance(nuevo_nodo.nodo_derecha.nodo_central, Proposicion) == True and nuevo_nodo.nodo_derecha.nodo_central.value == nodo_der.nodo_central.value):
+
+                            nodo_actual.nodo_central = Proposicion(0)
+                            nodo_actual.nodo_derecha = None
+                            nodo_actual.nodo_izquierda = None
+
+        return nodo_actual
+
+
+
+
+
+        
+        
+
+
+
 
 
 
@@ -218,6 +273,9 @@ class SimplificadorArbol:
 
 
 
+
+
+
     def simplificar(self, arbol): # funcion que simplifica el arbol
     # solo vamos a programar aquellas funciones que simplifican el arbol
 
@@ -244,5 +302,7 @@ class SimplificadorArbol:
         arbol = self.simplificar_py1(arbol)
 
         arbol = self.simplificar_pyp(arbol)
+
+        arbol = self.simplificar_pynop(arbol)
         
         return arbol # al final devolvemos el arbol # una vez que hemos terminado con la recursividad
