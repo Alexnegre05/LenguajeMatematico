@@ -51,9 +51,11 @@ class Check(Logica):
   # ejemplo de (p^q) a solo p^q, también tenemos que tener cuidado con casos como (p^q)^(pvq) porque aquí no podemos eliminar los delimitadores
   def eliminar_parentesis_exteriores(self):
 
+    primero = self.array[0]
+    ultimo = self.array[-1] # con esto el codigo es mas rapido, aqui no ponemos los isinstance en variables ya que solo aparecen una vez
 
     # aquí comprobamos si tenemos un último ) y un primer (, si no, devolvemos 0
-    if (len(self.array) < 2 or isinstance(self.array[0], Parentesis) == False or self.array[0].parentesis != "(" or isinstance(self.array[-1], Parentesis) == False or self.array[-1].parentesis != ")"):
+    if (len(self.array) < 2 or isinstance(primero, Parentesis) == False or primero.parentesis != "(" or isinstance(ultimo, Parentesis) == False or ultimo.parentesis != ")"):
       return 0
     
     contador_parentesis = 1
@@ -76,6 +78,7 @@ class Check(Logica):
       # Ejemplo: (p ^ q) ^ (r v s) -> Rompe aquí en el primer ')' because no envuelve todo
        
       if contador_parentesis == 0:
+
         return 0
 
     if contador_parentesis == 1: # si ha encontrado parentesis
@@ -119,11 +122,15 @@ class Check(Logica):
       
       for i in range(valor_iteracion,-1,-1):
 
-          if (isinstance(self.array[i], Parentesis) == True and self.array[i].parentesis == ")"):
+          elemento_actual = self.array[i]
+
+          es_parentesis = isinstance(elemento_actual, Parentesis)
+
+          if (es_parentesis == True and elemento_actual.parentesis == ")"):
            
             numero_de_parentesis = numero_de_parentesis + 1
          
-          elif (isinstance(self.array[i], Parentesis) == True and self.array[i].parentesis == "("):
+          elif (es_parentesis == True and elemento_actual.parentesis == "("):
             
             numero_de_parentesis = numero_de_parentesis -1  # restamos en este caso
 
@@ -133,12 +140,15 @@ class Check(Logica):
           # el i >0 es para i -1
 
           if (numero_de_parentesis == 0 and i > 0):
-            
-            if(isinstance(self.array[i - 1], Parentesis) == True and i != valor_iteracion and self.array[i-1].parentesis == "("): 
+
+            elemento_anterior = self.array[i - 1]
+
+            if(isinstance(elemento_anterior, Parentesis) == True and i != valor_iteracion and elemento_anterior.parentesis == "("): 
               # estamos comprobando que la i va hacia atrás, por lo que en lugar de i+1 es i - 1
               
                # eliminamos las posiciones donde había un () extra
               del self.array[valor_iteracion + 1]
+
               del self.array[i - 1]
 
               return 1
@@ -158,32 +168,45 @@ class Check(Logica):
 
     value = 1
 
+    array_eliminar = self.array
+
     while (value == 1): # este código es para eliminar los delimitadores exteriores ( expresión )
     # el bucle es para el caso de más de un delimitador como (( expresión ))
 
       value = self.eliminar_parentesis_exteriores() # eliminamos si podemos los delimitadores exteriores, si recibimos un 1
 
       if (value == 1):
-        self.array.pop(0) # restamos el primer y el último elemento
-        self.array.pop(-1)
+
+        array_eliminar.pop(0) # restamos el primer y el último elemento
+        array_eliminar.pop(-1)
 
     
 
     value2 = 1
+
     while(value2 == 1):
       
       value2 = self.eliminar_parentesis_redundantes()
 
     length = len(self.array)
+
     i = 0 # (número que guarda la posición del array)
 
     # bucle que recorre cada posición del array
+
     while (i < length):
 
+      valor_actual = self.array[i]
+
+      isinstance_actual_proposicion = isinstance(valor_actual, Proposicion)
+      isinstance_actual_operacion = isinstance(valor_actual, Operador)
+      isinstance_actual_parentesis = isinstance(valor_actual, Parentesis)
+
+
       # aquí comprobamos que el usuario haya puesto un operador, una proposición o un delimitador
-      if (isinstance(self.array[i], Proposicion) == False and isinstance(self.array[i], Operador) == False and isinstance(self.array[i], Parentesis) == False):
+      if (isinstance_actual_proposicion == False and isinstance_actual_operacion == False and isinstance_actual_parentesis == False):
         
-        raise Exception("the expression contains elements that are not or a proposition or an operator or a delimeter")
+        raise Exception("La expresion contiene elementos que no son ni parentesis ni proposiciones ni operadores")
 
 
 
@@ -191,7 +214,7 @@ class Check(Logica):
       if (i == 0):
         
         # aquí comprobamos si el elemento es una proposición verificando lo opuesto
-        if (isinstance(self.array[i], Proposicion) == False and isinstance(self.array[i], Parentesis) == False):
+        if (isinstance_actual_proposicion == False and isinstance_actual_parentesis == False):
           
           # aquí sabemos que esto es una operación, así que ahora comprobamos si el valor no es ¬
 
@@ -205,68 +228,69 @@ class Check(Logica):
         
         # CASO A: Si el último elemento es una Proposición, validamos el anterior (Tu lógica original)
 
-        if (isinstance(self.array[i], Proposicion) == True):
+        if (isinstance_actual_proposicion == True):
+
           if (isinstance(self.array[i-1], Operador) == False):
             return 0
 
         # CASO B: Si el último elemento es un Delimitador, nos aseguramos de que sea ")" y no "("
 
-        if (isinstance(self.array[i], Parentesis) == True):
+        if (isinstance_actual_parentesis == True):
           
           if (self.array[i].parentesis == "("):
             return 0
 
         # CASO C: Si no es ni una Proposición ni un Delimitador (por ejemplo, termina en ^), es incorrecto
 
-        if (isinstance(self.array[i], Proposicion) == False and isinstance(self.array[i], Parentesis) == False):
+        if (isinstance_actual_proposicion == False and isinstance_actual_parentesis == False):
           return 0
 
           
 
         
         # caso especial p ¬ q si y solo si i >= 2 porque si no i - 2 podría estar fuera de rango
-        if (i >= 2 and isinstance(self.array[i], Proposicion) == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operador == "¬" and isinstance(self.array[i-2], Proposicion) == True):
+        if (i >= 2 and isinstance_actual_proposicion == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operador == "¬" and isinstance(self.array[i-2], Proposicion) == True):
           return 0
 
       else: # el caso general
         
         # primero comprobamos que si tenemos una proposición, la anterior no sea una proposición
-        if (isinstance(self.array[i], Proposicion) == True and isinstance(self.array[i-1], Proposicion) == True):
+        if (isinstance_actual_proposicion == True and isinstance(self.array[i-1], Proposicion) == True):
 
           return 0
 
         # hacemos lo mismo pero para los operadores, pero sin el ¬ no es la expresión que estamos viendo, ejemplo: esto es posible ^¬ porque luego va una p, pero esto no ¬^
 
-        if (isinstance(self.array[i], Operador) == True and isinstance(self.array[i-1], Operador) == True and self.array[i].operador != "¬"):
+        if (isinstance_actual_operacion == True and isinstance(self.array[i-1], Operador) == True and self.array[i].operador != "¬"):
 
           return 0
 
        
 
         # aquí comprobamos que no tengamos el caso de p ¬ q y verificamos que i > 2
-        if (i >= 2 and isinstance(self.array[i], Proposicion) == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operador == "¬" and isinstance(self.array[i-2], Proposicion) == True):
+        if (i >= 2 and isinstance_actual_proposicion == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operador == "¬" and isinstance(self.array[i-2], Proposicion) == True):
           return 0
 
 
         # casos de delimitadores 
 
          # CASO 1: Evitar un operador binario justo después de un paréntesis de apertura ej: ( ^ p)
-        if (isinstance(self.array[i-1], Parentesis) == True and self.array[i-1].parentesis == "(" and isinstance(self.array[i], Operador) == True and self.array[i].operador != "¬"):
+        if (isinstance(self.array[i-1], Parentesis) == True and self.array[i-1].parentesis == "(" and isinstance_actual_operacion == True and self.array[i].operador != "¬"):
           
           return 0
 
         # CASO 2: Evitar un paréntesis de cierre justo después de un operador ej: (p ^ )
-        if (isinstance(self.array[i-1], Operador) == True and isinstance(self.array[i], Parentesis) == True and self.array[i].parentesis == ")"):
+        if (isinstance(self.array[i-1], Operador) == True and isinstance_actual_parentesis == True and self.array[i].parentesis == ")"):
           
           return 0
 
         # CASO 3: Evitar un paréntesis de apertura justo después de una proposición sin un operador ej: p ( q )
-        if (isinstance(self.array[i-1], Proposicion) == True and isinstance(self.array[i], Parentesis) == True and self.array[i].parentesis == "("):
+        if (isinstance(self.array[i-1], Proposicion) == True and isinstance_actual_parentesis == True and self.array[i].parentesis == "("):
           
           return 0
 
         # CASO 4: Evitar una proposición justo después de un paréntesis de cierre sin un operador ej: ( p ) q
-        if (isinstance(self.array[i-1], Parentesis) == True and self.array[i-1].parentesis == ")" and isinstance(self.array[i], Proposicion) == True):
+        if (isinstance(self.array[i-1], Parentesis) == True and self.array[i-1].parentesis == ")" and isinstance_actual_proposicion == True):
           
           return 0
 
