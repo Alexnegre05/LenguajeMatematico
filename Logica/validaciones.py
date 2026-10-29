@@ -168,17 +168,17 @@ class Check(Logica):
 
     value = 1
 
-    array_eliminar = self.array
-
+    
     while (value == 1): # este código es para eliminar los delimitadores exteriores ( expresión )
+    
     # el bucle es para el caso de más de un delimitador como (( expresión ))
 
       value = self.eliminar_parentesis_exteriores() # eliminamos si podemos los delimitadores exteriores, si recibimos un 1
 
       if (value == 1):
 
-        array_eliminar.pop(0) # restamos el primer y el último elemento
-        array_eliminar.pop(-1)
+        self.array.pop(-1) # restamos el primer y el último elemento
+        self.array.pop(0)
 
     
 
@@ -190,6 +190,10 @@ class Check(Logica):
 
     length = len(self.array)
 
+    if (length == 0): # Una expresión vacía tras limpiarla no es válida
+      
+      return 0
+
     i = 0 # (número que guarda la posición del array)
 
     # bucle que recorre cada posición del array
@@ -199,7 +203,9 @@ class Check(Logica):
       valor_actual = self.array[i]
 
       isinstance_actual_proposicion = isinstance(valor_actual, Proposicion)
+      
       isinstance_actual_operacion = isinstance(valor_actual, Operador)
+      
       isinstance_actual_parentesis = isinstance(valor_actual, Parentesis)
 
 
@@ -209,92 +215,83 @@ class Check(Logica):
         raise Exception("La expresion contiene elementos que no son ni parentesis ni proposiciones ni operadores")
 
 
+      # --- EXTRACTOR DE CONTEXTO (Variables del elemento anterior) ---
+      # Creamos variables del elemento anterior solo si i > 0 para evitar búsquedas repetidas e innecesarias
+      if (i > 0):
 
-      # casos especiales: el primer y el último elemento del array
-      if (i == 0):
+        valor_anterior = self.array[i - 1]
         
-        # aquí comprobamos si el elemento es una proposición verificando lo opuesto
-        if (isinstance_actual_proposicion == False and isinstance_actual_parentesis == False):
+        ant_proposicion = isinstance(valor_anterior, Proposicion)
+        
+        ant_operacion = isinstance(valor_anterior, Operador)
+        
+        ant_parentesis = isinstance(valor_anterior, Parentesis)
+      
+      else:
+        ant_proposicion = ant_operacion = ant_parentesis = False
+
+
+      
+
+      # 1. Validación de PROPOSICIONES
+      if (isinstance_actual_proposicion == True):
+        
+        # Evita proposición seguida de proposición (ej: p q) o proposición tras paréntesis de cierre (ej: ) q)
+        
+        if (ant_proposicion == True or (ant_parentesis == True and valor_anterior.parentesis == ")")):
+          return 0
+
+      # 2. Validación de OPERADORES
+      
+      elif (isinstance_actual_operacion == True):
+        
+        # Si es un negador "¬"
+        
+        if (valor_actual.operador == "¬"):
           
-          # aquí sabemos que esto es una operación, así que ahora comprobamos si el valor no es ¬
-
-          if (self.array[i].operador != "¬"):
-
-            return 0 # entonces sabemos que el primer elemento es ^... por lo que la expresión es incorrecta
-
-
-      elif(i == (length - 1)): # el último solo puede ser una proposición y el anterior a este solo puede ser una operación
-       
+          # Evita proposición seguida de negador directamente (ej: p ¬ q)
+          
+          if (ant_proposicion == True):
+            return 0
         
-        # CASO A: Si el último elemento es una Proposición, validamos el anterior (Tu lógica original)
-
-        if (isinstance_actual_proposicion == True):
-
-          if (isinstance(self.array[i-1], Operador) == False):
+        # Si es un operador binario (^, v, →...)
+        
+        else:
+          # No puede ser el primer elemento (ej: ^ p) ni estar tras un operador binario (ej: p ^ v q) ni tras un "(" (ej: ( ^ p)
+          if (i == 0 or (ant_operacion == True and valor_anterior.operador != "¬") or (ant_parentesis == True and valor_anterior.parentesis == "(")):
+            
+            return 0
+          
+          # No puede ser el último elemento (ej: p ^)
+          if (i == length - 1):
             return 0
 
-        # CASO B: Si el último elemento es un Delimitador, nos aseguramos de que sea ")" y no "("
-
-        if (isinstance_actual_parentesis == True):
+      # 3. Validación de PARÉNTESIS
+      
+      elif (isinstance_actual_parentesis == True):
+        
+        # Si es paréntesis de apertura "("
+        
+        if (valor_actual.parentesis == "("):
           
-          if (self.array[i].parentesis == "("):
+          # Evita "(" tras una proposición (ej: p ( ) o tras un ")" (ej: ) ( )
+          
+          if (ant_proposicion == True or (ant_parentesis == True and valor_anterior.parentesis == ")")):
+            
             return 0
-
-        # CASO C: Si no es ni una Proposición ni un Delimitador (por ejemplo, termina en ^), es incorrecto
-
-        if (isinstance_actual_proposicion == False and isinstance_actual_parentesis == False):
-          return 0
-
           
-
-        
-        # caso especial p ¬ q si y solo si i >= 2 porque si no i - 2 podría estar fuera de rango
-        if (i >= 2 and isinstance_actual_proposicion == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operador == "¬" and isinstance(self.array[i-2], Proposicion) == True):
-          return 0
-
-      else: # el caso general
-        
-        # primero comprobamos que si tenemos una proposición, la anterior no sea una proposición
-        if (isinstance_actual_proposicion == True and isinstance(self.array[i-1], Proposicion) == True):
-
-          return 0
-
-        # hacemos lo mismo pero para los operadores, pero sin el ¬ no es la expresión que estamos viendo, ejemplo: esto es posible ^¬ porque luego va una p, pero esto no ¬^
-
-        if (isinstance_actual_operacion == True and isinstance(self.array[i-1], Operador) == True and self.array[i].operador != "¬"):
-
-          return 0
-
-       
-
-        # aquí comprobamos que no tengamos el caso de p ¬ q y verificamos que i > 2
-        if (i >= 2 and isinstance_actual_proposicion == True and isinstance(self.array[i-1], Operador) == True and self.array[i-1].operador == "¬" and isinstance(self.array[i-2], Proposicion) == True):
-          return 0
-
-
-        # casos de delimitadores 
-
-         # CASO 1: Evitar un operador binario justo después de un paréntesis de apertura ej: ( ^ p)
-        if (isinstance(self.array[i-1], Parentesis) == True and self.array[i-1].parentesis == "(" and isinstance_actual_operacion == True and self.array[i].operador != "¬"):
+          # Evita que sea el último elemento (ej: p ^ ()
           
-          return 0
-
-        # CASO 2: Evitar un paréntesis de cierre justo después de un operador ej: (p ^ )
-        if (isinstance(self.array[i-1], Operador) == True and isinstance_actual_parentesis == True and self.array[i].parentesis == ")"):
+          if (i == length - 1):
+            return 0
+            
+        # Si es paréntesis de cierre ")"
+        else:
           
-          return 0
-
-        # CASO 3: Evitar un paréntesis de apertura justo después de una proposición sin un operador ej: p ( q )
-        if (isinstance(self.array[i-1], Proposicion) == True and isinstance_actual_parentesis == True and self.array[i].parentesis == "("):
+          # Evita que sea el primer elemento (ej: ) p) o que vaya tras un "(" vacío (ej: ()) o tras un operador binario (ej: p ^ ))
           
-          return 0
-
-        # CASO 4: Evitar una proposición justo después de un paréntesis de cierre sin un operador ej: ( p ) q
-        if (isinstance(self.array[i-1], Parentesis) == True and self.array[i-1].parentesis == ")" and isinstance_actual_proposicion == True):
-          
-          return 0
-
-
+          if (i == 0 or (ant_parentesis == True and valor_anterior.parentesis == "(") or ant_operacion == True):
+            return 0
 
 
       # al final siempre sumamos
@@ -304,7 +301,6 @@ class Check(Logica):
     # al final del bucle, si hemos llegado hasta aquí significa que todo está bien, por lo que enviamos un 1
 
     return 1
-
 
 
 
