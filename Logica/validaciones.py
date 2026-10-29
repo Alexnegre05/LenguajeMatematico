@@ -319,7 +319,7 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
     # 2. Comprobamos si el último elemento es un operador
     elif (isinstance(array[-1], Operador) == True):
-      
+
       raise Exception("No puedes acabar con un operador")
       
     # 3. Si no está vacío y no termina en operador, ¡es válido! (ya mida 1, 2 o más elementos)
@@ -338,22 +338,29 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
     if (node == None): # si es nulo devolvemos nulo
       return None
 
+    # creamos estas variables para que no se tenga que estar llamando todo el rato
+    derecha = node.nodo_derecha
+
+    izquierda = node.nodo_izquierda
+    
+    central = node.nodo_central
+
     # este if es para el caso en el que tenemos el final de una rama del árbol
 
-    if (node.nodo_derecha == None and node.nodo_izquierda == None):
+    if ( derecha == None and izquierda == None):
 
-      return node.nodo_central
+      return central
 
     # si es un operador evaluamos la izquierda y la derecha en la función
 
-    right = self.evaluar_nodo(node.nodo_derecha)
+    right = self.evaluar_nodo(derecha)
     
-    left = self.evaluar_nodo(node.nodo_izquierda)
+    left = self.evaluar_nodo(izquierda)
 
     # ahora que sabemos que tenemos un operador calculamos la operación, tenemos que separar el caso de ¬ de los demás
-    if (node.nodo_central.operador == "¬"):
+    if (central.operador == "¬"):
 
-      operation = Operacion(right, node.nodo_central, None)
+      operation = Operacion(right, central, None)
       
       # Si hay un operador atrapado en la rama izquierda debido al slicing, lo ejecutamos sobre el resultado
       if (left != None and hasattr(left, 'operador') == True and left.operador == "¬"):
@@ -365,7 +372,7 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
         operation = Operacion(p_intermedia, left, None)
     else:
 
-      operation = Operacion(left, node.nodo_central, right)
+      operation = Operacion(left, central, right)
 
     result = operation.Resultado()
 
