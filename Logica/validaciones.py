@@ -312,25 +312,27 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
   def __init__(self, array):
 
+    # 1. Comprobamos si el array es nulo o está completamente vacío
+    if (array is None or len(array) == 0):
 
-    if (array is not None and len(array) > 1 and isinstance(array[-1], Operador) == False): 
-      # queremos que el array tenga más de un argumento y que el último no sea un operador
+      raise Exception("No hay suficientes elementos en la expresion")
+
+    # 2. Comprobamos si el último elemento es un operador
+    elif (isinstance(array[-1], Operador) == True):
+      
+      raise Exception("No puedes acabar con un operador")
+      
+    # 3. Si no está vacío y no termina en operador, ¡es válido! (ya mida 1, 2 o más elementos)
+    else:
       self.array = array
 
-    else:
-      
-      if (array is None or len(array) == 1):
-        raise Exception("there are not sufiecient elements in the expression")
-      
-      else:
-        raise Exception("You can not end with a operator")
 
 
 
 
 
   # función que evalúa un nodo del AST y calcula un valor
-  
+
   def evaluar_nodo(self,node):
 
     if (node == None): # si es nulo devolvemos nulo
