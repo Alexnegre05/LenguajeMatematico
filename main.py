@@ -4,24 +4,46 @@ from Logica.validaciones import expresion
 # pruebas
 logica = Logica()
 
-proposicion = Proposicion(1)      
-operador = Operador("^")          
+proposicion = Proposicion(1)
+operador = Operador("^")
 operador2 = Operador("¬")
 operador3 = Operador("v")
-proposicion2 = Proposicion(0)     
-delimeter1 = Parentesis("(")
-delimeter2 = Parentesis(")")
+operador4 = Operador("-->")
+operador5 = Operador("<-->")
+proposicion2 = Proposicion(0)
 
-# EXPRESIÓN ADAPTADA: p ^ 0
-expresion1= expresion([
-    delimeter1,
+# EXPRESIÓN SIN PARÉNTESIS:
+# 1 ^ ¬1 v 1 ^ 0 v 0 --> 1 ^ 1 v 0 ^ 1 v 0 --> 0 ^ 1 v 0
+
+expresion1 = expresion([
+    proposicion,
+    operador,
     operador2,
-    proposicion, 
+    proposicion,
+    operador3,
+    proposicion,
+    operador,
+    proposicion2,
+    operador3,
+    proposicion2,
+    operador4,
+    proposicion,
     operador,
     proposicion,
-    delimeter2
+    operador3,
+    proposicion2,
+    operador,
+    proposicion,
+    operador3,
+    proposicion2,
+    operador4,
+    proposicion2,
+    operador,
+    proposicion,
+    operador3,
+    proposicion2
 ])
 
 # Evaluamos la expresión
 value = expresion1.evaluar()
-print(value)  # Debería dar 0 tras pasar por tu SimplificadorArbol
+print(value)

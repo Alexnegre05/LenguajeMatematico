@@ -1,0 +1,50 @@
+      # CODIGO ORIGINAL DE LAS TABLAS DE VERDAD
+      
+      # if (Operador == "^"): # comprobamos uno por uno qué operador estamos usando, 
+      #   # como sabemos que solo es 1 en un valor en concreto de la tabla de verdad y 0 en los demas podemos devolver 0, 
+      #   # hacemos cosas similares para los otros operadores
+
+      #   # vamos caso por caso
+      #   if (Porposicion1 == 1 and Proposicion2 == 1):
+          
+      #     return 1
+
+      #   else:
+      #     return 0
+
+      # # hacemos lo mismo para los otros operadores
+      # elif (Operador == "v"):
+
+
+      #   if (Porposicion1 == 0 and Proposicion2 == 0):
+      #     return 0
+
+      #   else:
+      #     return 1
+
+      # elif (Operador == "-->"):
+
+
+      #   if (Porposicion1 == 1 and Proposicion2 == 0):
+      #     return 0
+
+      #   else:
+      #     return 1
+
+
+      # elif (Operador == "<-->"):
+
+
+      #   if (Porposicion1 == Proposicion2): # si ambos valen o 1 o 0
+      #     return 1
+
+      #   else:
+      #     return 0
+
+      # elif (Operador == "¬"): # caso especial, la negación ya que solo tiene una proposicion 
+
+      #   if (Porposicion1 == 0):
+      #     return 1
+        
+      #   else:
+      #     return 0

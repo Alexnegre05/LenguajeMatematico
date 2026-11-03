@@ -459,6 +459,9 @@ class SimplificadorArbol:
             else:
                 numero_actual_nodos = numero_nodos # si el arbol es none por algun error ponemos que los nodos sean iguales para salir de el bucle
 
+            print(numero_nodos)
+            print(numero_actual_nodos)
+
             
         return arbol # devolvemos el arbol simplificado
 
