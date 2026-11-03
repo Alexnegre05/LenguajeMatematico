@@ -189,9 +189,8 @@ class Check(Logica):
       value = self.eliminar_parentesis_exteriores() # eliminamos si podemos los delimitadores exteriores, si recibimos un 1
 
       if (value == 1):
-
-        self.array.pop(-1) # restamos el primer y el último elemento
-        self.array.pop(0)
+        self.array = self.array[1:-1] # restamos el primer y el último elemento, es mas rapido slicing que pop
+        
 
     
 
@@ -211,9 +210,11 @@ class Check(Logica):
 
     # bucle que recorre cada posición del array
 
-    while (i < length):
+    # OPTIMIZACIÓN: Cambiamos el 'while (i < length)' manual por un 'for' con 'enumerate'
+    # Esto elimina el coste de buscar por índice (valor_actual = self.array[i]) y el incremento manual (i = i + 1)
+    for i, valor_actual in enumerate(self.array):
 
-      valor_actual = self.array[i]
+      
 
       isinstance_actual_proposicion = isinstance(valor_actual, Proposicion)
       
@@ -228,8 +229,8 @@ class Check(Logica):
         raise Exception("La expresion contiene elementos que no son ni parentesis ni proposiciones ni operadores")
 
 
-      # --- EXTRACTOR DE CONTEXTO (Variables del elemento anterior) ---
-      # Creamos variables del elemento anterior solo si i > 0 para evitar búsquedas repetidas e innecesarias
+      
+      # Creamos variables para ahorarr memoria solo si i > 0 para evitar búsquedas repetidas e innecesarias
       if (i > 0):
 
         valor_anterior = self.array[i - 1]
@@ -246,7 +247,7 @@ class Check(Logica):
 
       
 
-      # 1. Validación de PROPOSICIONES
+      # 1. Validación de proposiciones
       if (isinstance_actual_proposicion == True):
         
         # Evita proposición seguida de proposición (ej: p q) o proposición tras paréntesis de cierre (ej: ) q)
@@ -254,11 +255,16 @@ class Check(Logica):
         if (ant_proposicion == True or (ant_parentesis == True and valor_anterior.parentesis == ")")):
           return 0
 
-      # 2. Validación de OPERADORES
+      # 2. Validación de operadores
+
+      
       
       elif (isinstance_actual_operacion == True):
         
         # Si es un negador "¬"
+
+        if (i == length - 1): # evitamos el caso P v ¬ 
+          return 0
         
         if (valor_actual.operador == "¬"):
           
@@ -279,7 +285,7 @@ class Check(Logica):
           if (i == length - 1):
             return 0
 
-      # 3. Validación de PARÉNTESIS
+      # 3. Validación de parentesis
       
       elif (isinstance_actual_parentesis == True):
         
@@ -307,8 +313,7 @@ class Check(Logica):
             return 0
 
 
-      # al final siempre sumamos
-      i = i + 1
+      
 
     # FIN DEL BUCLE
     # al final del bucle, si hemos llegado hasta aquí significa que todo está bien, por lo que enviamos un 1
