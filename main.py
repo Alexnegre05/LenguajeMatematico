@@ -19,7 +19,29 @@ expresion1 = expresion([
     proposicion,
     operador,
     operador2,
-    
+    proposicion,
+    operador3,
+    proposicion,
+    operador,
+    proposicion2,
+    operador3,
+    proposicion2,
+    operador4,
+    proposicion,
+    operador,
+    proposicion,
+    operador3,
+    proposicion2,
+    operador,
+    proposicion,
+    operador3,
+    proposicion2,
+    operador4,
+    proposicion2,
+    operador,
+    proposicion,
+    operador3,
+    proposicion2
 ])
 
 # Evaluamos la expresión

@@ -54,15 +54,25 @@ class AST():
         
         for j in range(len(lista) - 1, -1, -1):
 
+            elemento = lista[j]
+
+            # dado que no podemos usar isinstance, usamos hasattr para verificar si tiene un atributo
+            # es hasattr(objeto, "nombre del atributo"), ejemplo hasattr(array[i], operador) para self.operator...
+            # ponemos esto de forma general trabajando con type
+            
+            # getattr te devuelve el atributo, si no lo encuentra devuelve None, haciendo innecesario el hasattr
+
+            val_parentesis = getattr(elemento, tipo_parentesis, None)
+
             # Si el elemento actual es un ')' aumentamos el nivel ANTES de evaluar (yendo hacia atrás)
-            if (hasattr(lista[j], tipo_parentesis) == True and getattr(lista[j], tipo_parentesis) == ")"):
+            if (val_parentesis != None and val_parentesis == ")"):
                
                 profundidad_parentesis = profundidad_parentesis + 1
                 continue # Pasamos al siguiente elemento
 
            
             # Si el elemento actual es un '(' reducimos el nivel DESPUÉS de evaluar (yendo hacia atrás)
-            if (hasattr(lista[j], tipo_parentesis) == True and getattr(lista[j], tipo_parentesis) == "("):
+            if (val_parentesis != None and val_parentesis == "("):
                
                 profundidad_parentesis = profundidad_parentesis - 1
                 continue # Pasamos al siguiente elemento
@@ -72,15 +82,12 @@ class AST():
             if (profundidad_parentesis > 0):
                 continue
 
-            # dado que no podemos usar isinstance, usamos hasattr para verificar si tiene un atributo
-            # es hasattr(objeto, "nombre del atributo"), ejemplo hasattr(array[i], operador) para self.operator...
-            # ponemos esto de forma general trabajando con type
-
-            # getattr te devuelve el atributo
             
-            if (hasattr(lista[j], tipo) == True):
+            val_tipo = getattr(elemento, tipo, None)
 
-                precedencia_actual = self.precedencia[getattr(lista[j], tipo)]
+            if (val_tipo != None):
+
+                precedencia_actual = self.precedencia[val_tipo]
             
                 # Comprobamos si la precedencia actual es menor que nuestra cota superior (supremo)
                 if (precedencia_actual < menor_precedencia_encontrada):
@@ -102,18 +109,18 @@ class AST():
         
         # que es evaluar el valor de position_array
            
+            atr_tipo_parentesis_0 = getattr(lista[0], tipo_parentesis, None)
+            
+            atr_tipo_parentesis_1 = getattr(lista[-1], tipo_parentesis, None)
+
             # ahora queremos saber si dentro de este array que estamos buscando el primer elemento es un ( y el último un )
-            if (hasattr(lista[0], tipo_parentesis) == True and getattr(lista[0], tipo_parentesis) == "("):
+            if (atr_tipo_parentesis_0 != None and atr_tipo_parentesis_0 == "("):
                 
                 
-                if (hasattr(lista[-1], tipo_parentesis) == True and getattr(lista[-1], tipo_parentesis) == ")"):
+                if (atr_tipo_parentesis_1 != None and atr_tipo_parentesis_1 == ")"):
 
-                    for i in range(1, len(lista)-1): # creamos una lista nueva que contenga lo que está dentro de los delimitadores
-                        nueva_lista.append(lista[i])
-
-                    # una vez que hemos creado este array, llamamos a la función recursiva con un return
-
-                    return self.crear_ast(nueva_lista, tipo, tipo_parentesis)
+                    # aqui eliminamos de el ast el ultimo y 
+                    return self.crear_ast(lista[1:-1], tipo, tipo_parentesis)
 
 
         lista_derecha = []
@@ -122,8 +129,8 @@ class AST():
 
         # cambiamos un for manual por slicing
         
-        lista_izquierda = lista[0:posicion_lista]
-        lista_derecha = lista[posicion_lista + 1:len(lista)]
+        lista_izquierda = lista[:posicion_lista]
+        lista_derecha = lista[posicion_lista + 1:]
         
         # ahora usamos recursividad y llamamos de nuevo a la misma función pero para cada array
         branca_derecha = self.crear_ast(lista_derecha, tipo, tipo_parentesis)
