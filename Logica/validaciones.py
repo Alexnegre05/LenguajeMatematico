@@ -17,11 +17,11 @@ class Check(Logica):
 
         balance_parentesis = 0
        
-        for i in range (0, len(self.array)):
+        for elemento in self.array:
           
-          if (isinstance(self.array[i], Parentesis) == True):  # comprobamos si el elemento es un delimitador
+          if (isinstance(elemento, Parentesis) == True):  # comprobamos si el elemento es un delimitador
     
-            if (self.array[i].parentesis == "("):
+            if (elemento.parentesis == "("):
               
               balance_parentesis = balance_parentesis + 1
             else:
@@ -64,11 +64,15 @@ class Check(Logica):
     # el for puede empezar una posicion despues y finalizar una posicion antes
     # por eso si o si count delimeters ya empieza en 1
 
-    for i in range(1, len(self.array) -1):
+    # Optimizamos usando slicing [1:-1] para ignorar el primero y el último.
+    # Iteramos directamente sobre los objetos en lugar de usar índices.
 
-      if (isinstance(self.array[i],Parentesis) == True):
+    # el for elem in lista es mas rapido
+    for elemento in self.array[1:-1]:
 
-        if (self.array[i].parentesis == "("): # sumamos uno cuando encontramos ( y restamos uno para )
+      if (isinstance(elemento,Parentesis) == True):
+
+        if (elemento.parentesis == "("): # sumamos uno cuando encontramos ( y restamos uno para )
           contador_parentesis = contador_parentesis + 1
 
         else:
@@ -99,6 +103,8 @@ class Check(Logica):
     
     valor_iteracion = -1
     
+   
+
 
     for i in range(len(self.array)- 2,-1,-1): # vamos hasta -1 para el caso del 0
           
@@ -144,12 +150,19 @@ class Check(Logica):
             elemento_anterior = self.array[i - 1]
 
             if(isinstance(elemento_anterior, Parentesis) == True and i != valor_iteracion and elemento_anterior.parentesis == "("): 
+              
               # estamos comprobando que la i va hacia atrás, por lo que en lugar de i+1 es i - 1
               
-               # eliminamos las posiciones donde había un () extra
-              del self.array[valor_iteracion + 1]
+               # guardamos los indices que queremos borrar
+              der = valor_iteracion + 1
 
-              del self.array[i - 1]
+              izq = i - 1
+
+              # esto es sumamos todos los elementos que estan antes de el primer parentesis izq a eliminar, lo mismo con el derecho,+ todo lo que hay en el medio
+              # el :final el final ya es posicion -1 pero el inicio: no lo es, por eso hay que sumar + 1 en el del medio ya que no queremso empezar en el 
+              # parentesis, lo mismo en el de der+1.
+
+              self.array = self.array[:izq] + self.array[izq+1:der] + self.array[der+1:] 
 
               return 1
 
