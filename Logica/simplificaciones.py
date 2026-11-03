@@ -15,7 +15,7 @@ class SimplificadorArbol:
 
         while (nodo_nulo == False):
         
-            if (nodo_actual == None or nodo_actual.nodo_central == None): # salimos del while
+            if (nodo_actual is None or nodo_actual.nodo_central is None): # salimos del while
         
                 nodo_nulo = True
         
@@ -85,7 +85,7 @@ class SimplificadorArbol:
     def simplificar_py0(self, nodo_actual):
 
                 
-            if (nodo_actual == None or nodo_actual.nodo_central == None): 
+            if (nodo_actual is None or nodo_actual.nodo_central is None): 
                 
                 return nodo_actual
                 
@@ -123,7 +123,7 @@ class SimplificadorArbol:
     def simplificar_py1(self, nodo_actual): # lo msimo pero ahora devolvemos p
     
                     
-            if (nodo_actual == None or nodo_actual.nodo_central == None): 
+            if (nodo_actual is None or nodo_actual.nodo_central is None): 
                     
                 return nodo_actual
                     
@@ -161,7 +161,7 @@ class SimplificadorArbol:
 
     def simplificar_pyp(self, nodo_actual):
 
-        if (nodo_actual == None or nodo_actual.nodo_central == None): 
+        if (nodo_actual is None or nodo_actual.nodo_central is None): 
                             
                 return nodo_actual
                             
@@ -192,7 +192,7 @@ class SimplificadorArbol:
 
     def simplificar_pynop(self, nodo_actual):
 
-        if (nodo_actual == None or nodo_actual.nodo_central == None):
+        if (nodo_actual is None or nodo_actual.nodo_central is None):
 
             return nodo_actual
 
@@ -239,7 +239,7 @@ class SimplificadorArbol:
 
     def simplificar_po0(self, nodo_actual):
 
-            if (nodo_actual == None or nodo_actual.nodo_central == None):
+            if (nodo_actual is None or nodo_actual.nodo_central is None):
 
                 return nodo_actual
 
@@ -277,7 +277,7 @@ class SimplificadorArbol:
 
     def simplificar_po1(self, nodo_actual): # lo msimo pero ahora devolvemos 1
 
-            if (nodo_actual == None or nodo_actual.nodo_central == None):
+            if (nodo_actual is None or nodo_actual.nodo_central is None):
 
                 return nodo_actual
 
@@ -312,7 +312,7 @@ class SimplificadorArbol:
 
     def simplificar_pop(self, nodo_actual):
 
-        if (nodo_actual == None or nodo_actual.nodo_central == None):
+        if (nodo_actual is None or nodo_actual.nodo_central is None):
 
                 return nodo_actual
 
@@ -338,7 +338,7 @@ class SimplificadorArbol:
 
     def simplificar_ponop(self, nodo_actual):
 
-        if (nodo_actual == None or nodo_actual.nodo_central == None):
+        if (nodo_actual is None or nodo_actual.nodo_central is None):
 
             return nodo_actual
 
@@ -383,7 +383,7 @@ class SimplificadorArbol:
     # ley que simplifica el cao 0 --> p = 0
     def simplificar_cond0(self, nodo_actual):
 
-            if (nodo_actual == None or nodo_actual.nodo_central == None):
+            if (nodo_actual is None or nodo_actual.nodo_central is None):
 
                 return nodo_actual
 
@@ -409,7 +409,7 @@ class SimplificadorArbol:
 
     def simplificar_cond1(self, nodo_actual):
 
-        if (nodo_actual == None or nodo_actual.nodo_central == None):
+        if (nodo_actual is None or nodo_actual.nodo_central is None):
 
             return nodo_actual
 
@@ -442,22 +442,27 @@ class SimplificadorArbol:
 
     def simplificar_general(self, arbol): # funcion que se encarga unicamente de comprovar si al llamar a las funciones que simplifican el arbol si se ha simplificado o no, si no lo ha hecho salimos
 
+        if (arbol is None):
+            return None
+        
         numero_nodos = 0
         
         numero_actual_nodos = - 1  # otra variable que va a ir cambiando que va a ser los nodos despues de ver si se puede simplificar
         
         while(numero_nodos != numero_actual_nodos):
 
-            if (arbol != None):
-                numero_nodos = arbol.contar_nodos_ast(arbol) # esta funcion nos dice el numero de nodos de un AST
+            numero_nodos = arbol.contar_nodos_ast(arbol) # esta funcion nos dice el numero de nodos de un AST
 
-                arbol = self.simplificar(arbol)
+                
+            arbol = self.simplificar(arbol)
 
+            if (arbol is None): # si el arbol es none salimos de aqui, nos ahorramos el if else
+                break
+                
+            
+            numero_actual_nodos = arbol.contar_nodos_ast(arbol)
 
-                numero_actual_nodos = arbol.contar_nodos_ast(arbol)
-
-            else:
-                numero_actual_nodos = numero_nodos # si el arbol es none por algun error ponemos que los nodos sean iguales para salir de el bucle
+          
 
             print(numero_nodos)
             print(numero_actual_nodos)
@@ -480,14 +485,24 @@ class SimplificadorArbol:
 
         # primera simplificacion ¬ ¬ p == p
 
-        if (hasattr(arbol, 'nodo_derecha') and arbol.nodo_derecha != None): 
-        
-            arbol.nodo_derecha = self.simplificar(arbol.nodo_derecha)
-        
-        if (hasattr(arbol, 'nodo_izquierda') and arbol.nodo_izquierda != None): 
-                
-            arbol.nodo_izquierda = self.simplificar(arbol.nodo_izquierda)
+        derecha = arbol.nodo_derecha
 
+        izquierda = arbol.nodo_izquierda
+
+        central = arbol.nodo_central
+
+
+        if (hasattr(arbol, 'nodo_derecha') and derecha != None): 
+        
+            arbol.nodo_derecha = self.simplificar(derecha)
+        
+        if (hasattr(arbol, 'nodo_izquierda') and arbol.izquierda != None): 
+                
+            arbol.nodo_izquierda = self.simplificar(arbol.izquierda)
+
+        # Si el nodo central no tiene un operador válido no hay nada que simplificar
+        if central is None or hasattr(central, 'operador') == False:
+            return arbol
         
         arbol = self.simplificar_doble_negacion(arbol) # aqui recibimos el primer nodo 
 

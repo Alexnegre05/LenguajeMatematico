@@ -348,7 +348,7 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
   def evaluar_nodo(self,node):
 
-    if (node == None): # si es nulo devolvemos nulo
+    if (node is None): # si es nulo devolvemos nulo
       return None
 
     # creamos estas variables para que no se tenga que estar llamando todo el rato
@@ -360,7 +360,7 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
     # este if es para el caso en el que tenemos el final de una rama del árbol
 
-    if ( derecha == None and izquierda == None):
+    if ( derecha is None and izquierda is None):
 
       return central
 
