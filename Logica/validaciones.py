@@ -335,11 +335,6 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
 
       raise Exception("No hay suficientes elementos en la expresion")
 
-    # 2. Comprobamos si el último elemento es un operador
-    elif (isinstance(array[-1], Operador) == True):
-
-      raise Exception("No puedes acabar con un operador")
-      
     # 3. Si no está vacío y no termina en operador, ¡es válido! (ya mida 1, 2 o más elementos)
     else:
       self.array = array
@@ -395,9 +390,8 @@ class expresion(Check): # clase que usamos para definir cuándo estamos trabajan
     result = operation.Resultado()
 
     # tenemos que poner el resultado dentro de una nueva proposición
-    p = Proposicion(result)
-
-    return p # devolvemos la p
+    
+    return Proposicion(result) # devolvemos la proposicion
 
 
 
