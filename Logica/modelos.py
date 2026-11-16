@@ -1,6 +1,7 @@
 # Documento donde ponemos las definiciones de los elementos que vamos a usar en la lógica
 
 class Logica(): # clase general que controla todo lo relacionado con la lógica
+  __slots__ = () # hay que poner esto vacio sino se hereda en las otras clases el diccionario
 
   pass
 
@@ -31,7 +32,7 @@ class Operador(Logica): # clase que define cada operador que necesitamos en la l
 
   def __init__(self, operador):
 
-    if(operador == "^" or operador == "v" or operador == "¬" or operador == "-->" or operador == "<-->"):  # comprueba si el operador es válido
+    if(operador in ("^", "v", "¬", "-->", "<-->")):  # comprueba si el operador es válido
       self.operador = operador
 
     else:
@@ -40,7 +41,7 @@ class Operador(Logica): # clase que define cada operador que necesitamos en la l
 class Parentesis(Logica): # clase que define los () 
 
   __slots__ = ("parentesis",) 
-  
+
   def __init__(self, parentesis):
     
     if (parentesis == "(" or parentesis == ")"):

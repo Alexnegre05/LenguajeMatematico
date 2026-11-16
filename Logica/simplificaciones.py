@@ -84,80 +84,71 @@ class SimplificadorArbol:
 
 
     
-
     def simplificar_pyp(self, nodo_actual):
 
-        if (nodo_actual is None or nodo_actual.nodo_central is None): 
-                            
-                return nodo_actual
-                            
-        else:
-            
-            if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "^"): # si es ^
-            
-                nodo_izq = nodo_actual.nodo_izquierda
-            
-                nodo_der = nodo_actual.nodo_derecha
-            
-                if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
-            
-                    if (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True) and nodo_der.nodo_central.value == nodo_izq.nodo_central.value): # si el valor es 1
-            
-                        nodo_actual.nodo_central = nodo_der.nodo_central
-                        nodo_actual.nodo_izquierda = None
-                        nodo_actual.nodo_derecha = None
-            
-                    
-            
+        nodo_izq = nodo_actual.nodo_izquierda
+
+        nodo_der = nodo_actual.nodo_derecha
+
+        if (nodo_izq is not None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
+
+            if (nodo_der is not None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
+
+                if (nodo_der.nodo_central.value == nodo_izq.nodo_central.value):
+
+                    nodo_actual.nodo_central = nodo_der.nodo_central
+                    nodo_actual.nodo_izquierda = None
+                    nodo_actual.nodo_derecha = None
+
         return nodo_actual
 
 
-
-    
 
 
     def simplificar_pynop(self, nodo_actual):
 
-        if (nodo_actual is None or nodo_actual.nodo_central is None):
+        nodo_izq = nodo_actual.nodo_izquierda
 
-            return nodo_actual
+        nodo_der = nodo_actual.nodo_derecha
 
-        else:
-            if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "^"): # si es ^
+        # caso p ^ ¬p
 
-                nodo_izq = nodo_actual.nodo_izquierda
+        if (nodo_izq is not None and isinstance(nodo_izq.nodo_central, Proposicion) == True):
 
-                nodo_der = nodo_actual.nodo_derecha
+            if (nodo_der is not None and isinstance(nodo_der.nodo_central, Operador) == True and nodo_der.nodo_central.operador == "¬"):
 
-                # caso p ^ ¬p
+                nieto_der = nodo_der.nodo_derecha
 
-                if (nodo_izq != None and isinstance(nodo_izq.nodo_central, Proposicion) == True):
+                if (nieto_der is not None and isinstance(nieto_der.nodo_central, Proposicion) == True):
 
-                    if (nodo_der != None and isinstance(nodo_der.nodo_central, Operador) == True and nodo_der.nodo_central.operador == "¬"):
+                    if (nieto_der.nodo_central.value == nodo_izq.nodo_central.value):
 
-                        nuevo_nodo = nodo_der
+                        nodo_actual.nodo_central = Proposicion(0)
 
-                        if (nuevo_nodo.nodo_derecha != None and isinstance(nuevo_nodo.nodo_derecha.nodo_central, Proposicion) == True and nuevo_nodo.nodo_derecha.nodo_central.value == nodo_izq.nodo_central.value):
+                        nodo_actual.nodo_derecha = None
 
-                            nodo_actual.nodo_central = Proposicion(0)
-                            nodo_actual.nodo_derecha = None
-                            nodo_actual.nodo_izquierda = None
+                        nodo_actual.nodo_izquierda = None
 
-                # caso ¬p ^ p
+        # caso ¬p ^ p
 
-                elif (nodo_izq != None and isinstance(nodo_izq.nodo_central, Operador) == True and nodo_izq.nodo_central.operador == "¬"):
+        elif (nodo_izq is not None and isinstance(nodo_izq.nodo_central, Operador) == True and nodo_izq.nodo_central.operador == "¬"):
 
-                    if (nodo_der != None and isinstance(nodo_der.nodo_central, Proposicion) == True):
+            if (nodo_der is not None and isinstance(nodo_der.nodo_central, Proposicion) == True):
 
-                        nuevo_nodo = nodo_izq
+                nieto_izq = nodo_izq.nodo_derecha
 
-                        if (nuevo_nodo.nodo_derecha != None and isinstance(nuevo_nodo.nodo_derecha.nodo_central, Proposicion) == True and nuevo_nodo.nodo_derecha.nodo_central.value == nodo_der.nodo_central.value):
+                if (nieto_izq is not None and isinstance(nieto_izq.nodo_central, Proposicion) == True):
 
-                            nodo_actual.nodo_central = Proposicion(0)
-                            nodo_actual.nodo_derecha = None
-                            nodo_actual.nodo_izquierda = None
+                    if (nieto_izq.nodo_central.value == nodo_der.nodo_central.value):
+
+                        nodo_actual.nodo_central = Proposicion(0)
+
+                        nodo_actual.nodo_derecha = None
+
+                        nodo_actual.nodo_izquierda = None
 
         return nodo_actual
+
 
 
     
@@ -165,194 +156,165 @@ class SimplificadorArbol:
 
     def simplificar_po0(self, nodo_actual):
 
-            if (nodo_actual is None or nodo_actual.nodo_central is None):
+        nodo_izq = nodo_actual.nodo_izquierda
 
-                return nodo_actual
+        nodo_der = nodo_actual.nodo_derecha
 
-            else:
-                if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "v"): # si es v
+        if (nodo_izq is not None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
 
-                    nodo_izq = nodo_actual.nodo_izquierda
+            if (nodo_der is not None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
 
-                    nodo_der = nodo_actual.nodo_derecha
+                if (nodo_der.nodo_central.value == 0):
 
-                    if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
+                    nodo_actual.nodo_central = nodo_izq.nodo_central
+                    nodo_actual.nodo_izquierda = None
+                    nodo_actual.nodo_derecha = None
 
-                        if (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True) and nodo_der.nodo_central.value == 0): # si el valor es 0
+        # caso 0 v p, la inversa
 
-                            nodo_actual.nodo_central = nodo_izq.nodo_central
-                            nodo_actual.nodo_izquierda = None
-                            nodo_actual.nodo_derecha = None
+        elif (nodo_der is not None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
 
-                    # caso 0 y p, la inversa
+            if (nodo_izq is not None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
 
-                    elif (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
+                if (nodo_izq.nodo_central.value == 0):
 
-                        if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True) and nodo_izq.nodo_central.value == 0): # si el valor es 0
+                    nodo_actual.nodo_central = nodo_der.nodo_central
+                    nodo_actual.nodo_izquierda = None
+                    nodo_actual.nodo_derecha = None
 
-                            nodo_actual.nodo_central = nodo_der.nodo_central
-                            nodo_actual.nodo_izquierda = None
-                            nodo_actual.nodo_derecha = None
-
-            return nodo_actual
+        return nodo_actual
 
 
 
 
+    def simplificar_po1(self, nodo_actual): # lo mismo pero ahora devolvemos 1
 
+        nodo_izq = nodo_actual.nodo_izquierda
 
-    def simplificar_po1(self, nodo_actual): # lo msimo pero ahora devolvemos 1
+        nodo_der = nodo_actual.nodo_derecha
 
-            if (nodo_actual is None or nodo_actual.nodo_central is None):
+        if (nodo_izq is not None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
 
-                return nodo_actual
+            if (nodo_der is not None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
 
-            else:
-                if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "v"): # si es v
+                if (nodo_der.nodo_central.value == 1):
 
-                    nodo_izq = nodo_actual.nodo_izquierda
+                    nodo_actual.nodo_central = nodo_der.nodo_central
+                    nodo_actual.nodo_izquierda = None
+                    nodo_actual.nodo_derecha = None
 
-                    nodo_der = nodo_actual.nodo_derecha
+        # caso 1 v p, la inversa
 
-                    if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
+        elif (nodo_der is not None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
 
-                        if (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True) and nodo_der.nodo_central.value == 1): # si el valor es 1
+            if (nodo_izq is not None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
 
-                            nodo_actual.nodo_central = nodo_der.nodo_central
-                            nodo_actual.nodo_izquierda = None
-                            nodo_actual.nodo_derecha = None
+                if (nodo_izq.nodo_central.value == 1):
 
-                    # caso 1 y p, la inversa
+                    nodo_actual.nodo_central = nodo_izq.nodo_central
+                    nodo_actual.nodo_izquierda = None
+                    nodo_actual.nodo_derecha = None
 
-                    elif (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
-
-                        if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True) and nodo_izq.nodo_central.value == 1):
-
-                            nodo_actual.nodo_central = nodo_izq.nodo_central
-                            nodo_actual.nodo_izquierda = None
-                            nodo_actual.nodo_derecha = None
-
-            return nodo_actual
+        return nodo_actual
 
 
 
     def simplificar_pop(self, nodo_actual):
 
-        if (nodo_actual is None or nodo_actual.nodo_central is None):
+        nodo_izq = nodo_actual.nodo_izquierda
 
-                return nodo_actual
+        nodo_der = nodo_actual.nodo_derecha
 
-        else:
+        if (nodo_izq is not None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
 
-            if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "v"): # si es v
+            if (nodo_der is not None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
 
-                nodo_izq = nodo_actual.nodo_izquierda
+                if (nodo_der.nodo_central.value == nodo_izq.nodo_central.value):
 
-                nodo_der = nodo_actual.nodo_derecha
-
-                if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
-
-                    if (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True) and nodo_der.nodo_central.value == nodo_izq.nodo_central.value): # si el valor es 1
-
-                        nodo_actual.nodo_central = nodo_der.nodo_central
-                        nodo_actual.nodo_izquierda = None
-                        nodo_actual.nodo_derecha = None
+                    nodo_actual.nodo_central = nodo_der.nodo_central
+                    nodo_actual.nodo_izquierda = None
+                    nodo_actual.nodo_derecha = None
 
         return nodo_actual
+
 
 
 
     def simplificar_ponop(self, nodo_actual):
 
-        if (nodo_actual is None or nodo_actual.nodo_central is None):
+        nodo_izq = nodo_actual.nodo_izquierda
 
-            return nodo_actual
+        nodo_der = nodo_actual.nodo_derecha
 
-        else:
-            if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "v"): # si es v
+        # caso p v ¬p
 
-                nodo_izq = nodo_actual.nodo_izquierda
+        if (nodo_izq is not None and isinstance(nodo_izq.nodo_central, Proposicion) == True):
 
-                nodo_der = nodo_actual.nodo_derecha
+            if (nodo_der is not None and isinstance(nodo_der.nodo_central, Operador) == True and nodo_der.nodo_central.operador == "¬"):
 
-                # caso p v ¬p
+                nieto_der = nodo_der.nodo_derecha
 
-                if (nodo_izq != None and isinstance(nodo_izq.nodo_central, Proposicion) == True):
+                if (nieto_der is not None and isinstance(nieto_der.nodo_central, Proposicion) == True):
 
-                    if (nodo_der != None and isinstance(nodo_der.nodo_central, Operador) == True and nodo_der.nodo_central.operador == "¬"):
-
-                        nuevo_nodo = nodo_der
-
-                        if (nuevo_nodo.nodo_derecha != None and isinstance(nuevo_nodo.nodo_derecha.nodo_central, Proposicion) == True and nuevo_nodo.nodo_derecha.nodo_central.value == nodo_izq.nodo_central.value):
-
-                            nodo_actual.nodo_central = Proposicion(1)
-                            nodo_actual.nodo_derecha = None
-                            nodo_actual.nodo_izquierda = None
-
-                # caso ¬p v p
-
-                elif (nodo_izq != None and isinstance(nodo_izq.nodo_central, Operador) == True and nodo_izq.nodo_central.operador == "¬"):
-
-                    if (nodo_der != None and isinstance(nodo_der.nodo_central, Proposicion) == True):
-
-                        nuevo_nodo = nodo_izq
-
-                        if (nuevo_nodo.nodo_derecha != None and isinstance(nuevo_nodo.nodo_derecha.nodo_central, Proposicion) == True and nuevo_nodo.nodo_derecha.nodo_central.value == nodo_der.nodo_central.value):
-
-                            nodo_actual.nodo_central = Proposicion(1)
-                            nodo_actual.nodo_derecha = None
-                            nodo_actual.nodo_izquierda = None
-
-        return nodo_actual
-
-
-    # ley que simplifica el cao 0 --> p = 0
-    def simplificar_cond0(self, nodo_actual):
-
-            if (nodo_actual is None or nodo_actual.nodo_central is None):
-
-                return nodo_actual
-
-            else:
-                if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "-->"): # si es -->
-
-                    nodo_izq = nodo_actual.nodo_izquierda
-
-                    nodo_der = nodo_actual.nodo_derecha
-
-                    if (nodo_izq != None and isinstance(nodo_izq.nodo_central, Proposicion) == True and nodo_izq.nodo_central.value == 0):
+                    if (nieto_der.nodo_central.value == nodo_izq.nodo_central.value):
 
                         nodo_actual.nodo_central = Proposicion(1)
-                        nodo_actual.nodo_izquierda = None
                         nodo_actual.nodo_derecha = None
+                        nodo_actual.nodo_izquierda = None
 
-            return nodo_actual
+        # caso ¬p v p
 
+        elif (nodo_izq is not None and isinstance(nodo_izq.nodo_central, Operador) == True and nodo_izq.nodo_central.operador == "¬"):
 
+            if (nodo_der is not None and isinstance(nodo_der.nodo_central, Proposicion) == True):
 
+                nieto_izq = nodo_izq.nodo_derecha
 
+                if (nieto_izq is not None and isinstance(nieto_izq.nodo_central, Proposicion) == True):
 
+                    if (nieto_izq.nodo_central.value == nodo_der.nodo_central.value):
 
-    def simplificar_cond1(self, nodo_actual):
-
-        if (nodo_actual is None or nodo_actual.nodo_central is None):
-
-            return nodo_actual
-
-        else:
-            if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "-->"): # si es -->
-
-                nodo_izq = nodo_actual.nodo_izquierda
-
-                nodo_der = nodo_actual.nodo_derecha
-
-                if (nodo_der != None and isinstance(nodo_der.nodo_central, Proposicion) == True and nodo_der.nodo_central.value == 1):
-
-                    nodo_actual.nodo_central = Proposicion(1)
-                    nodo_actual.nodo_izquierda = None
-                    nodo_actual.nodo_derecha = None
+                        nodo_actual.nodo_central = Proposicion(1)
+                        nodo_actual.nodo_derecha = None
+                        nodo_actual.nodo_izquierda = None
 
         return nodo_actual
+
+
+
+        # ley que simplifica el caso 0 --> p = 1
+    def simplificar_cond0(self, nodo_actual):
+
+        nodo_izq = nodo_actual.nodo_izquierda
+
+        if (nodo_izq is not None and isinstance(nodo_izq.nodo_central, Proposicion) == True):
+
+            if (nodo_izq.nodo_central.value == 0):
+
+                nodo_actual.nodo_central = Proposicion(1)
+                nodo_actual.nodo_izquierda = None
+                nodo_actual.nodo_derecha = None
+
+        return nodo_actual
+
+
+
+
+    # ley que simplifica el caso p --> 1 = 1
+    def simplificar_cond1(self, nodo_actual):
+
+        nodo_der = nodo_actual.nodo_derecha
+
+        if (nodo_der is not None and isinstance(nodo_der.nodo_central, Proposicion) == True):
+
+            if (nodo_der.nodo_central.value == 1):
+
+                nodo_actual.nodo_central = Proposicion(1)
+                nodo_actual.nodo_izquierda = None
+                nodo_actual.nodo_derecha = None
+
+        return nodo_actual
+
 
 
 

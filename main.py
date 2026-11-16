@@ -16,9 +16,10 @@ proposicion2 = Proposicion(0)
 # 1 ^ ¬1 v 1 ^ 0 v 0 --> 1 ^ 1 v 0 ^ 1 v 0 --> 0 ^ 1 v 0
 
 expresion1 = expresion([
+    operador2,
     proposicion,
-    operador,
-    proposicion2
+    operador3,
+    proposicion
 ])
 
 # Evaluamos la expresión
