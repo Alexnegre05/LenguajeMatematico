@@ -5,6 +5,7 @@ from Logica.modelos import Logica, Proposicion, Operador, Parentesis
 
 class Operacion(Logica): # clase que toma dos proposiciones y una operación y devuelve un valor de 0 o 1
 
+  __slots__ = ("Proposicion1", "operador", "Proposicion2")
   
   def __init__(self, Proposicion1, operador, Proposicion2):
 

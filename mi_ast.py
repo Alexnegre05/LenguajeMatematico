@@ -14,6 +14,7 @@ class AST():
 
     }
 
+    __slots__ = ("nodo_central", "nodo_derecha", "nodo_izquierda")
     
     def __init__(self, nodo_central, nodo_derecha = None, nodo_izquierda = None): # necesita un nodo central y dos hijos que pueden ser nulos
 

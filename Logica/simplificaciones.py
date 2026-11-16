@@ -10,72 +10,31 @@ class SimplificadorArbol:
     
     def simplificar_doble_negacion(self, nodo_actual): # funcion que simplifica la doble negacion
 
+        
 
-        nodo_nulo = False # si encontramos que un nodo es nulo dejamos de buscar 
+        # 1. Caso sin paréntesis: el otro "¬" quedó atrapado en la rama izquierda
+        nodo_izq = nodo_actual.nodo_izquierda
 
-        while (nodo_nulo == False):
-        
-            if (nodo_actual is None or nodo_actual.nodo_central is None): # salimos del while
-        
-                nodo_nulo = True
-        
-            else:
-        
-                if ((isinstance(nodo_actual.nodo_central, Operador) == True) and nodo_actual.nodo_central.operador == "¬"): # si el nodo es una operacion y es ¬
-                
-                    # comprobamos si tiene hijos, y si el operador es ¬
-                    
-                    # Verificamos si en la izquierda se quedó atrapado el otro operador "¬"
-                    nodo_izq = nodo_actual.nodo_izquierda
+        if (nodo_izq is not None and isinstance(nodo_izq.nodo_central, Operador) == True and nodo_izq.nodo_central.operador == "¬"):
             
-                    if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Operador) == True) and nodo_izq.nodo_central.operador == "¬"):
+            nieto = nodo_actual.nodo_derecha
+
+            if (nieto is not None and nieto.nodo_central is not None):
+
+                return nieto
+
+        # 2. Caso estándar con paréntesis: el otro "¬" está en la rama derecha
+        nodo_der = nodo_actual.nodo_derecha
+
+        if (nodo_der is not None and isinstance(nodo_der.nodo_central, Operador) == True and nodo_der.nodo_central.operador == "¬"):
             
-                        # En la estructura plana sin paréntesis, la清 proposición real está a la derecha de la raíz
-                        
-                        nieto = nodo_actual.nodo_derecha 
+            nieto = nodo_der.nodo_derecha
 
-                        if (nieto != None and nieto.nodo_central != None and isinstance(nieto.nodo_central, Proposicion) == True):
+            if (nieto is not None and nieto.nodo_central is not None):
 
-                            # escribimos ¬¬p = p
+                return nieto
 
-                            # Reemplazamos la raíz completa por el nodo de la proposición pura
-                            nodo_actual = nieto 
-
-                            nodo_actual.nodo_derecha = None 
-
-                            nodo_actual.nodo_izquierda = None
-                           
-                            nodo_nulo = True
-                        
-                        else:
-                            nodo_nulo = True
-                    else:
-                        # Si no estaba a la izquierda, aplicamos el caso estándar para cuando viene con paréntesis
-                        nodo_der = nodo_actual.nodo_derecha
-                        
-                        if (nodo_der != None and (isinstance(nodo_der.nodo_central, Operador) == True) and nodo_der.nodo_central.operador == "¬"):
-                           
-                            
-                            nieto = nodo_der.nodo_derecha
-                            
-                            if (nieto != None and nieto.nodo_central != None and isinstance(nieto.nodo_central, Proposicion) == True):
-                                nodo_actual = nieto
-                                
-                                nodo_actual.nodo_derecha = None
-                                
-                                nodo_actual.nodo_izquierda = None
-                                
-                                nodo_nulo = True
-                            
-                            else:
-                                nodo_nulo = True
-                                
-                        else:
-                            nodo_nulo = True
-                else:
-                    nodo_nulo = True
-
-        return nodo_actual # devolvemos el arbol
+        return nodo_actual
 
 
 
@@ -84,75 +43,42 @@ class SimplificadorArbol:
 
     def simplificar_py0(self, nodo_actual):
 
-                
-            if (nodo_actual is None or nodo_actual.nodo_central is None): 
-                
-                return nodo_actual
-                
-            else:
-                if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "^"): # si es ^
+            
 
-                    nodo_izq = nodo_actual.nodo_izquierda
+            nodo_izq = nodo_actual.nodo_izquierda
+            nodo_der = nodo_actual.nodo_derecha
 
-                    nodo_der = nodo_actual.nodo_derecha
+            # Caso p ^ 0 = 0 (funciona tanto si p es una letra como si es un subárbol con paréntesis)
+            if (nodo_der is not None and (isinstance(nodo_der.nodo_central, Proposicion) == True) and nodo_der.nodo_central.value == 0):
+                return nodo_der
 
-                    if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
-
-                        if (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True) and nodo_der.nodo_central.value == 0): # si el valor es 0
-
-                            nodo_actual.nodo_central = nodo_der.nodo_central
-                            nodo_actual.nodo_izquierda = None
-                            nodo_actual.nodo_derecha = None
-
-                    # caso 0 y p, la inversa
-                    
-                    elif (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
-
-                        if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True) and nodo_izq.nodo_central.value == 0): # si el valor es 0
-
-                            nodo_actual.nodo_central = nodo_izq.nodo_central # ponemos a 0 el resultado
-                            nodo_actual.nodo_izquierda = None
-                            nodo_actual.nodo_derecha = None
+            # Caso 0 ^ p = 0 (la inversa)
+            if (nodo_izq is not None and (isinstance(nodo_izq.nodo_central, Proposicion) == True) and nodo_izq.nodo_central.value == 0):
+                return nodo_izq
 
             return nodo_actual
 
 
+    def simplificar_py1(self, nodo_actual): # lo mismo pero ahora devolvemos p
 
+       
 
+        nodo_izq = nodo_actual.nodo_izquierda
 
-    def simplificar_py1(self, nodo_actual): # lo msimo pero ahora devolvemos p
-    
-                    
-            if (nodo_actual is None or nodo_actual.nodo_central is None): 
-                    
-                return nodo_actual
-                    
-            else:
-                if (isinstance(nodo_actual.nodo_central, Operador) == True and nodo_actual.nodo_central.operador == "^"): # si es ^
-    
-                    nodo_izq = nodo_actual.nodo_izquierda
-    
-                    nodo_der = nodo_actual.nodo_derecha
-    
-                    if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True)):
-    
-                        if (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True) and nodo_der.nodo_central.value == 1): # si el valor es 1
-    
-                            nodo_actual.nodo_central = nodo_izq.nodo_central
-                            nodo_actual.nodo_izquierda = None
-                            nodo_actual.nodo_derecha = None
-    
-                    # caso 1 y p, la inversa
-                        
-                    elif (nodo_der != None and (isinstance(nodo_der.nodo_central, Proposicion) == True)):
-    
-                        if (nodo_izq != None and (isinstance(nodo_izq.nodo_central, Proposicion) == True) and nodo_izq.nodo_central.value == 1): 
-    
-                            nodo_actual.nodo_central = nodo_der.nodo_central 
-                            nodo_actual.nodo_izquierda = None
-                            nodo_actual.nodo_derecha = None
-    
-            return nodo_actual
+        nodo_der = nodo_actual.nodo_derecha
+
+        # Caso p ^ 1 = p (devolvemos el nodo izquierdo completo, conservando sus hijos si es un subárbol)
+        if (nodo_der is not None and (isinstance(nodo_der.nodo_central, Proposicion) == True) and nodo_der.nodo_central.value == 1):
+
+            return nodo_izq
+
+        # Caso 1 ^ p = p (la inversa)
+        if (nodo_izq is not None and (isinstance(nodo_izq.nodo_central, Proposicion) == True) and nodo_izq.nodo_central.value == 1):
+
+            return nodo_der
+
+        return nodo_actual
+
 
 
 
@@ -445,11 +371,9 @@ class SimplificadorArbol:
         if (arbol is None):
             return None
         
-        numero_nodos = 0
-        
-        numero_actual_nodos = - 1  # otra variable que va a ir cambiando que va a ser los nodos despues de ver si se puede simplificar
-        
-        while(numero_nodos != numero_actual_nodos):
+        cambios = True  # si es true el while continua en caso contrario el while se detiene
+
+        while(cambios == True):
 
             numero_nodos = arbol.contar_nodos_ast(arbol) # esta funcion nos dice el numero de nodos de un AST
 
@@ -461,6 +385,14 @@ class SimplificadorArbol:
                 
             
             numero_actual_nodos = arbol.contar_nodos_ast(arbol)
+            
+            
+            print(numero_nodos)
+            print(numero_actual_nodos)
+
+            if (numero_actual_nodos == numero_nodos): # si no se ha simplificado cambios es false
+
+                cambios = False
 
           
             
@@ -499,28 +431,49 @@ class SimplificadorArbol:
         # Si el nodo central no tiene un operador válido no hay nada que simplificar
         if central is None or hasattr(central, 'operador') == False:
             return arbol
+
+        operador = central.operador # comprovamos antes el operador
+
+        if (operador == "¬"):
         
-        arbol = self.simplificar_doble_negacion(arbol) # aqui recibimos el primer nodo 
+            arbol = self.simplificar_doble_negacion(arbol) # aqui recibimos el primer nodo 
 
-        # segunda simplificacion p ^ 0 = p
-        # 
-        arbol = self.simplificar_py0(arbol)
+            
+        if (operador == "^"):
 
-        arbol = self.simplificar_py1(arbol)
+            arbol = self.simplificar_py0(arbol)
 
-        arbol = self.simplificar_pyp(arbol)
+        if (operador == "^"):
+            
+            arbol = self.simplificar_py1(arbol)
 
-        arbol = self.simplificar_pynop(arbol)
+        if (operador == "^"):
+            
+            arbol = self.simplificar_pyp(arbol)
 
-        arbol = self.simplificar_po0(arbol)
+        if (operador == "^"):
+            
+            arbol = self.simplificar_pynop(arbol)
 
-        arbol = self.simplificar_po1(arbol)
-        
-        arbol = self.simplificar_pop(arbol)
-        
-        arbol = self.simplificar_ponop(arbol)
+        if (operador == "v"):
+            arbol = self.simplificar_po0(arbol)
 
-        arbol = self.simplificar_cond0(arbol)
+        if (operador == "v"):
+            
+            arbol = self.simplificar_po1(arbol)
 
-        arbol = self.simplificar_cond1(arbol)
+        if (operador == "v"):
+
+            arbol = self.simplificar_pop(arbol)
+
+        if (operador == "v"):
+
+            arbol = self.simplificar_ponop(arbol)
+
+        if (operador == "-->"):
+            arbol = self.simplificar_cond0(arbol)
+
+        if (operador == "-->"):
+            arbol = self.simplificar_cond1(arbol)
+
         return arbol # al final devolvemos el arbol # una vez que hemos terminado con la recursividad

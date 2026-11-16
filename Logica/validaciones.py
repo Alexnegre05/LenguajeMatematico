@@ -12,7 +12,7 @@ from Logica.operaciones import Proposicion, Operador, Parentesis, Operacion
 
 class Check(Logica):
 
- 
+  
   def check_parentesis(self):
 
         balance_parentesis = 0
@@ -285,6 +285,10 @@ class Check(Logica):
           if (i == length - 1):
             return 0
 
+        
+
+        
+
       # 3. Validación de parentesis
       
       elif (isinstance_actual_parentesis == True):
@@ -327,6 +331,7 @@ class Check(Logica):
 
 
 class expresion(Check): # clase que usamos para definir cuándo estamos trabajando con múltiples proposiciones y operaciones
+
 
   def __init__(self, array):
 

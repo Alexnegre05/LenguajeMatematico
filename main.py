@@ -17,7 +17,7 @@ proposicion2 = Proposicion(0)
 
 expresion1 = expresion([
     proposicion,
-    operador3,
+    operador,
     proposicion2
 ])
 
