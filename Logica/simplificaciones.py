@@ -463,10 +463,6 @@ class SimplificadorArbol:
             numero_actual_nodos = arbol.contar_nodos_ast(arbol)
 
           
-
-            print(numero_nodos)
-            print(numero_actual_nodos)
-
             
         return arbol # devolvemos el arbol simplificado
 
@@ -496,9 +492,9 @@ class SimplificadorArbol:
         
             arbol.nodo_derecha = self.simplificar(derecha)
         
-        if (hasattr(arbol, 'nodo_izquierda') and arbol.izquierda != None): 
+        if (hasattr(arbol, 'nodo_izquierda') and izquierda != None): 
                 
-            arbol.nodo_izquierda = self.simplificar(arbol.izquierda)
+            arbol.nodo_izquierda = self.simplificar(izquierda)
 
         # Si el nodo central no tiene un operador válido no hay nada que simplificar
         if central is None or hasattr(central, 'operador') == False:
