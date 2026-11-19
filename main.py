@@ -1,27 +1,14 @@
 from Logica.modelos import Logica, Proposicion, Operador, Parentesis
 from Logica.validaciones import expresion
 
+from Conjuntos.modelos import Conjunto_General, Conjunto
+
 # pruebas
 logica = Logica()
 
-proposicion = Proposicion(1)
-operador = Operador("^")
-operador2 = Operador("¬")
-operador3 = Operador("v")
-operador4 = Operador("-->")
-operador5 = Operador("<-->")
-proposicion2 = Proposicion(0)
+conjunto_general = Conjunto_General()
 
-# EXPRESIÓN SIN PARÉNTESIS:
-# 1 ^ ¬1 v 1 ^ 0 v 0 --> 1 ^ 1 v 0 ^ 1 v 0 --> 0 ^ 1 v 0
+conjunto = Conjunto("x", [1,1,2,3])
 
-expresion1 = expresion([
-    operador2,
-    proposicion,
-    operador3,
-    proposicion
-])
 
-# Evaluamos la expresión
-value = expresion1.evaluar()
-print(value)
+print(conjunto)
