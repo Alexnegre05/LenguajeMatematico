@@ -46,3 +46,38 @@ class Conjunto(Conjunto_General):
         return f"{self.nombre} = {{{self.elementos}}}" # necesitamos 3 llaves 1 para el f string otra para indicar que printee {} y otra para indicarle 
     # que seguimos en f string
 
+
+
+class Operador(Conjunto_General):
+  
+   # 
+
+  __slots__ = ("operador",)
+
+  def __init__(self, operador):
+
+    if(operador in ("∈", "∉", "∪", "∩", "-", "⊆", "⊈", "Δ")):  # comprueba si el operador es válido
+      self.operador = operador
+
+    else:
+      raise Exception("Operator not valid")
+
+
+  def __str__(self):
+       
+    return self.operador
+
+
+    
+   
+class Parentesis(Conjunto_General): # clase que define los () 
+
+  __slots__ = ("parentesis",) 
+
+  def __init__(self, parentesis):
+    
+    if (parentesis == "(" or parentesis == ")"):
+      self.parentesis = parentesis
+    
+    else:
+      raise Exception("Wrong delimeters")
